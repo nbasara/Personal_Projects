@@ -37,3 +37,10 @@ linear = pickle.load(pickle_in)
 predictions = linear.predict(x_test)
 for x in range(len(predictions)):
     print(predictions[x], x_test[x], y_test[x])
+
+p = "G1"
+style.use("ggplot")
+pyplot.scatter(data[p], data[predict])
+pyplot.xlabel(p)
+pyplot.ylabel(predict)
+pyplot.show()
