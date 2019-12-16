@@ -16,20 +16,34 @@ cardRank5 = []
 #classification for hand
 result    = []
 
-
 #mainFunction
 def main():
 	print("Let's do this!\n")
 	hands = getHands()
 
 	hand1 = findHand(hands)
-	#hand2 = findHand(hands)
-	#hand3 = findHand(hands)
-	#hand4 = findHand(hands)
-	#hand5 = findHand(hands)
+	hand2 = findHand(hands)
+	hand3 = findHand(hands)
+	hand4 = findHand(hands)
+	hand5 = findHand(hands)
 
 	resultHand1 = findResult(hand1)
-	check = checkResult(hand1, resultHand1)
+	resultHand2 = findResult(hand2)
+	resultHand3 = findResult(hand3)
+	resultHand4 = findResult(hand4)
+	resultHand5 = findResult(hand5)
+
+	check1 = checkResult(hand1, resultHand1)
+	check2 = checkResult(hand1, resultHand1)
+	check3 = checkResult(hand1, resultHand1)
+	check4 = checkResult(hand1, resultHand1)
+	check5 = checkResult(hand1, resultHand1)
+
+	print(check1)
+	print(check2)
+	print(check3)
+	print(check4)
+	print(check5)
 
 def getHands():
 	file = open("poker-hand-training-true.data", "r")
@@ -57,11 +71,14 @@ def findHand(a):
 	return x
 
 def findResult(a):
+	flush = 0
+	pairs = 0
+	stright = 0
 	flush = checkFlush(a)
 	if flush != 1:
 		pairs = checkPairs(a)
 	if pairs == 0:
-		straight checkStraigt(a)
+		straight =  checkStraight(a)
 		if straight == 1 and flush == 1:
 			return 8
 		elif straight == 0 and flush == 1:
@@ -114,6 +131,24 @@ def checkPairs(a):
 		p = p + 1
 
 	return p
+
+def checkStraight(a):
+	hand = [cardRank1[a], cardRank2[a], cardRank3[a],cardRank4[a], cardRank5[a]]
+	hand.sort()
+	i = 0
+	count = 0
+	for i in range(4):
+		if hand[i] == 1 and hand[i+1] == 10:
+			count = count + 1
+		else:
+			if hand[i+1] == (hand[i]+1):
+				count = count + 1
+	if count ==  4 and hand[0] == 1:
+		return 2
+	elif count == 4:
+		return 1
+	else:
+		return 0
 
 def checkResult(a, b):
 	if b == result[a]:
