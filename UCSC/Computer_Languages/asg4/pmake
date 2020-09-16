@@ -1,0 +1,328 @@
+#!/usr/bin/perl
+#Nathan Basara nbasara
+
+use strict;
+use warnings;
+use Getopt::std;
+use Data::Dumper;
+use POSIX qw(strftime);
+
+$0 =~ s|.*/||;
+
+#given
+#sigtoperl: x86_64 Linux unix3.lt.ucsc.edu
+my %strsignal = (
+    0 => "Unknown signal 0",
+    1 => "Hangup",
+    2 => "Interrupt",
+    3 => "Quit",
+    4 => "Illegal instruction",
+    5 => "Trace/breakpoint trap",
+    6 => "Aborted",
+    7 => "Bus error",
+    8 => "Floating point exception",
+    9 => "Killed",
+   10 => "User defined signal 1",
+   11 => "Segmentation fault",
+   12 => "User defined signal 2",
+   13 => "Broken pipe",
+   14 => "Alarm clock",
+   15 => "Terminated",
+   16 => "Stack fault",
+   17 => "Child exited",
+   18 => "Continued",
+   19 => "Stopped (signal)",
+   20 => "Stopped",
+   21 => "Stopped (tty input)",
+   22 => "Stopped (tty output)",
+   23 => "Urgent I/O condition",
+   24 => "CPU time limit exceeded",
+   25 => "File size limit exceeded",
+   26 => "Virtual timer expired",
+   27 => "Profiling timer expired",
+   28 => "Window changed",
+   29 => "I/O possible",
+   30 => "Power failure",
+   31 => "Bad system call",
+   32 => "Unknown signal 32",
+   33 => "Unknown signal 33",
+);
+
+#set exit Status
+my $status = 0;
+
+END {exit $status;}
+$SIG{__WARN__} = sub {print STDERR "$0: @_"; $status = 1};
+$SIG{__DIE__} = sub {warn @_; $status = 1; exit};
+
+
+#finding if options were given
+my %opts;
+getops "dnf", \%opts;
+
+#setting up array of arguements
+push @ARGV, "-" unless @ARGV;
+#declaring local variables
+my @inputs = (); #array of inputs
+my @macros = (); #array macro values
+my @comnds = (); #array of command lines
+my $targ1  = (); #string containg first target
+my $chkT1  = (); #string of targets to check
+my $mkF    = "MakeFile";
+my %dependent;   #hash of dependents
+my %macrosH  ;   #hash of Macros
+my %commands ;   #hash of commands
+my $myTarget ;   #string of current target
+my $fileExt  ;   #string of file extensions
+my $fileName ;   #string of file Names
+my $curr = 0 ;   #current 
+
+
+#turn on option d 
+if (%opts){
+  print "Debug Mode\n"
+}
+
+#open makeFile
+open my $muhFile, "<$mkF>" or warn "Could not open makeFile\n";
+while(! eof($muhFile)){              #read until end of file
+  defined($l =  readline $muhFile)   #get next line from file
+  my $getChar = substr($l, 0,1);     #get first character from the line
+  if($getchar ne "#"){               #we ignore comments
+    if($l =~ /=/){                   #find the equal sign then macro
+      if($l =~ /\t/){
+      } 
+      else{
+        push(@macros, $l);           #onto the macro stack you go
+      }
+    }
+    if($l =~ /\t/){
+      $l =~ s/^\t*//;                #remove tabs from string
+      my $myCommand = "$myTarget" . "$l";
+      if($curr){                     #if we already have a command  
+        pop @comnds; $curr = 0;
+      }
+      push (@comnds, $myCommand);    #command goes into array of commands
+    }
+    elsif($l ~= /:/){                #target located
+      substr($l , index($l, ":", 0), 0) = ' '; #seperating the string into whitespace
+      my @targets = split m/\s+/, $line;  #putting line into array
+      $myTarget = $targets[0];       #now have current target
+      my %parameters = map { $_ => 1} @inputs; #creating a hash map for inputs
+      if(exists($parameters{$l})){
+        $curr = 1;                   #the current line is already in parameters hash set 
+      }
+      else{
+        push(@inputs, $l)            #put line into array of inputs
+      }
+      if($chkT1 == 0){
+        $targ1 = $myTarget;
+      }
+      $chkT1 = 1;
+    }
+  }
+}
+close $muhFile;                       #read through file
+
+####coding sub routines
+
+#navigating commmand Hash
+sub commandHash ($) {
+    my ($target) = @_; 
+    my $holder = $commands{$target};
+    my @qualify = ($dependent{$target}); 
+    foreach(@qualify;){
+        my @preq = @{ $_ } if $_;
+        
+        foreach(@preq) {
+            if(-e $_) { #print("$_ exists!\n"); 
+            } elsif($commands{$_}) { 
+                $fileExt = join(" ",@{$dependent{$_}});
+                $fileExt =~ s/[^\.]*//;
+                commandHash($_); 
+            } else { 
+                $fileExt = $_; 
+                if($_ =~ /%/){ }
+                else {
+                    $fileName = $_;
+                    $fileName =~ s/[\.].*//;
+                }
+                $fileExt =~ s/[^\.]*//;
+                $fileExt = '%'."$fileExt";
+                if($commands{$fileExt}) { 
+                  commandHash($fileExt); 
+                }
+            }
+        }
+    } 
+    if (!@{$commands{$target}}) {
+        $fileExt = $target; $fileName = $target;
+        $fileExt =~ s/[^\.]*//;
+        $fileName =~ s/[\.].*//;
+        $target = "\%". $fileExt;
+        $holder = $commands{$target};
+    }
+    # before returning from recursion, execute commands. 
+    foreach($holder) { 
+        my @list = @{$holder} if $holder;
+        foreach(@list) { 
+            my $b = 0;
+            if($_ =~ /- /){
+                $_ =~ s/^- *//;
+                $b = 1;
+            }
+            while($_ =~ /\${/) {
+                my @sys_words = split m/\s+/, $_;
+                $_ = split_mac @sys_words; 
+                chop $_;
+            }
+            while($_ =~ /\$</) {
+                my @sys_words = less_mac m/\s+/ . $_;
+                $_ = less_mac @sys_words; 
+                chop $_;
+            }
+
+            while($_ =~ /\$\$/) {
+                my @sys_words = dolla_mac m/\s+/ . $_;
+                $_ = dolla_mac @sys_words; 
+                chop $_;
+            }
+            print $_, "\n";
+            if ( !$opts{'n'} ) { 
+                if($b) { 
+                  $b = 0; system($_)== 0 
+                  or print "pmake: [***] Error $? (ignored)\n"; }
+                else {
+                  system($_) == 0 or die "$_ Error $?"; 
+                  }
+            }
+        }
+    } 
+}
+
+#evauluate hash for macros
+sub parse_mac ($) {
+    my ($myLine) = @_;
+    return undef unless $myLine =~ m/^(\S+)\s*=\s*(.*?)\s*$/;
+    my ($macro, $holder) = ($1, ($2));
+    my @holder2 = split m/\s+/, $holder;
+    my @result = ();
+    foreach(@holder2) { 
+      push(@result, $_); 
+    }
+    return $macro, \@result;
+}
+
+sub parse_dep ($) {
+    my ($myLine) = @_;
+    return undef unless $myLine =~ m/^(\S+)\s*:\s*(.*?)\s*$/;
+    my ($target, $dep) = ($1, ($2));
+    my @deps = split m/\s+/, $dep;
+    my @result = ();
+    if(substr($target, 0, 1) eq "\$") { 
+        my $holder = substr($target, 2, (length($target)-3));
+        my @newTarget = $macroH{$hold};
+        $target = "" .  "@{$new_target[0]}";  
+    }
+    foreach(@deps) {
+        my $first = substr($_, 0, 1);
+        if($first eq "\$") { 
+            my $var = substr($_, 2, (length($_)-3) );
+         my @man = $macroH{$variable};
+         for(my $i=0; $i<@man; $i++) {
+             my @myArray = $man[$i];
+             for(my $i=0; $i<@myArray; $i++){
+                push(@result, @{$myArray[$i]});
+             }
+         } 
+      }else { 
+      push(@result, $_); 
+     } 
+    }
+    return $target, \@result;
+}
+
+#getting the macros
+sub split_mac ($) {
+    my @sys_words = split m/\s+/, $_;
+    my $sys_cmd = "";
+    foreach(@sys_words) { 
+        if($_ =~ /\$/){     
+            my $holder = substr($_, 2, (length($_)-3));
+            if (exists $macroH{$tmp}){
+                my @myArray = $macroH{$holder};
+                foreach(@myArray) { 
+                    $sys_cmd = "$sys_cmd"."@{$_} "; 
+                }
+            } else { $sys_cmd = "$sys_cmd"."$_ "; }
+        }else{ $sys_cmd = "$sys_cmd"."$_ "; }
+    }
+    $_ = $sys_cmd;
+}
+
+sub less_mac ($) {
+    my @sys_words = split m/\s+/, $_;
+    my $sys_cmd = "";
+    foreach(@sys_words) { 
+        if($_ =~ /\$/){  
+            if($_ =~ /</){
+                $fileExt = ".c" if $fileExt eq ".o";
+                $fileExt = ".java" if $fileExt eq ".class";
+                $fileExt =~ s/[^\.]*//;
+                $sys_cmd = "$sys_cmd"."$f_nme"."$f_ext ";
+            } 
+        }else{ $sys_cmd = "$sys_cmd"."$_ "; }
+    }
+    $_ = $sys_cmd;
+}
+
+sub dolla_mac ($) {
+    my @sys_words = split m/\s+/, $_;
+    my $sys_cmd = "";
+    foreach(@sys_words) { 
+        if($_ =~ /\$\$/){ $_ =~ s/\$//; }
+        $sys_cmd = "$sys_cmd"."$_ "; 
+    }
+    $_ = $sys_cmd;
+}
+
+for my $macro (@macros) {
+    my ($mac, $val) = parse_mac $macro;
+    #print("mac: $mac\n");
+    print "$0: syntax error: $macro\n" and next unless defined $mac; 
+    $macroH{$mac} = $val;
+}
+
+for my $input (@inputs) {
+    my ($target, $dep) = parse_dep $input;
+    print "$0: syntax error: $input\n" and next unless defined $target;
+    $dependent{$target} = $dep;
+}
+
+for my $target (keys %dependent) {
+    my @cmds = ();
+    for my $cmd (@cmnds) {
+        my $real_cmd = ""; 
+        my $holderTar = substr( $cmd, 0, index( $cmd, ' '));
+        my $holder = "";
+        my $myCommand   = substr( $cmd, index( $cmd, ' ') + 1);
+        my @cmdW = split m/\s+/, $myCommand;
+        foreach(@cmdW) { $real_cmd = "$real_cmd"."$_ "; } 
+        if( substr($holderTar, 0, 1) eq "\$" ) {   
+            my $holder2 = substr($holderTar, 2, (length($holderTar)-3));
+            my @array2 = $macroH{$holder2};
+            foreach(@array2) { 
+                $holderTar = "@{$_}"; 
+            }  
+        }
+        if($target eq $holderTar) {
+            chop $real_cmd;
+            push(@cmds, $real_cmd);
+        }
+    }
+    $commands{$target} = \@cmds;
+}
+
+commandHash($myTarget);
+
+

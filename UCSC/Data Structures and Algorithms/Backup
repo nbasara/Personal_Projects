@@ -1,0 +1,143 @@
+//-----------------------------------------------------------------------------
+// FileIO.c
+// Illustrates file input-output commands and text processing using the
+// string functions strtok and strcat.
+//-----------------------------------------------------------------------------
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include"List.h"
+
+#define MAX_LEN 160
+
+int main(int argc, char * argv[]){
+  
+   List A = newList();
+
+   int n, lineCount,l,c, a = 0;
+   FILE *in, *out;
+   char line[MAX_LEN];
+   char* token;
+  char tokenlist[100]; 
+   
+  
+
+   // check command line for correct number of arguments
+   if( argc != 3 ){
+      printf("Usage: %s <input file> <output file>\n", argv[0]);
+      exit(1);
+   }
+
+   // open files for reading and writing 
+   in = fopen(argv[1], "r");
+   out = fopen(argv[2], "w");
+   if( in==NULL ){
+      printf("Unable to open file %s for reading\n", argv[1]);
+      exit(1);
+   }
+   if( out==NULL ){
+      printf("Unable to open file %s for writing\n", argv[2]);
+      exit(1);
+   }
+   
+   while( fgets (line, MAX_LEN,in) != NULL){
+		lineCount++;
+   }
+ 
+  
+  
+  in = fopen(argv[1], "r");
+  
+  
+  
+  
+   /* read each line of input file, then count and print tokens */
+  char theArray[lineCount][MAX_LEN];
+ 
+  while( fgets(line, MAX_LEN, in) != NULL)  {
+    //char* N = NULL;
+    n = 0;
+     token = strtok(line, "\n");
+    l= strlen(token);
+     tokenlist[0] = '\0';
+     strcat(&tokenlist[0], token);
+     token = strtok(NULL, " \n");
+    tokenlist[l+1] = '\0';
+    while(tokenlist[n] != '\0'){
+      theArray[a][n] = tokenlist[n];
+      n++;
+    }
+    for (int j = 0; j<lineCount;j++){
+     fprintf(out,"%s \n", &theArray[j][0]);
+  }
+    /*
+    theArray[a][n] = '\0';
+    
+    c = a;
+    n =0;
+    moveFront(A);
+    if(isEmpty(A)){
+      append(A, c);
+    }
+    else if(theArray[get(A)][n] > tokenlist[n]){
+          prepend(A,c);
+     }
+    else if(get(A) == back(A)){
+          append(A,c);
+     }
+    else{ 
+      while(theArray[get(A)][n] < tokenlist[n] || l == 0){
+        if(get(A) == back(A)){
+          append(A,c);
+        }
+        else{
+          moveNext(A);
+          n =0;
+          if(theArray[get(A)][n] == tokenlist[n] || l == 0){
+            while(theArray[get(A)][n] == tokenlist[n] || l == 0){
+              if (theArray[get(A)][n] == '\0'){
+                insertAfter(A,c);
+                l = 0;
+              }
+              else if(tokenlist[n] == '\0'){
+                insertBefore(A,c);
+                l =0;
+              }
+              else{
+                n++; 
+            }
+          }
+        }
+      }
+      if(back(A) == c || l ==0){
+        a = a;
+      }
+      else{
+        insertBefore(A,c);
+      }
+    }
+  }
+    
+    N = token;
+    free(&N);
+    
+    a = c;
+      a++;
+   }
+   
+  moveFront(A);
+  for (int j = 0; j<lineCount;j++){
+     fprintf(out,"%s \n", &theArray[get(A)][0]);
+    moveNext(A);
+  }
+ */
+  }
+
+   /* close files */
+   fclose(in);
+   fclose(out);
+
+   return(0);
+}
+ 

@@ -1,0 +1,30 @@
+#    Nathan Basara    #
+## nbasara@ucssc.edu ##
+###      pa3        ###
+######           ######
+#######################
+List.java Matrix,java Sparse.java ListTest.java MatrixTest.java Makefile README
+
+
+The List file is used to construct the linked list.
+It points forwards and backwards so that you may 
+move in both directions.  There are some general 
+functions that can be performed on this linked list
+in order to change the contents.
+
+Matrix creates an array of linked lists.  It then
+calls on functions within List to contruct and
+alter the matrix.
+
+Sparse acts the main function for this programming 
+assignment.  It opens a file to read its contents,
+places that contents into the desired matrix.  It
+then performs the desired function on both matrices
+and writes on the output file.
+
+ListTest is a basic tester for our list class 
+and Makefile acts as a compiler and dedicates a 
+main class.
+
+MatrixTest is a basic testing class that I used
+to see if my functions were working as desired.

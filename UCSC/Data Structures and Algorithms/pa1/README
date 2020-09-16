@@ -1,0 +1,26 @@
+#    Nathan Basara    #
+## nbasara@ucssc.edu ##
+###      pa1        ###
+######           ######
+#######################
+List.java Lex.java ListClient.java Makefile README
+
+
+The List file is used to construct the linked list.
+It points forwards and backwards so that you may 
+move in both directions.  There are some general 
+functions that can be performed on this linked list
+in order to change the contents.
+
+Lex acts the main function for this programming 
+assignment.  It opens a file to read its contents,
+places that contents into an array.  we use functions
+from List to create a list of indicies that will indirectly
+sort the array. At no point is the array sorted.  Instead
+the array is placed by calling upon the LinkedList of 
+indicies for the array.  The array is thus placed
+in alphabetical order in a second file.
+
+ListClient is a basic tester for our list class 
+and README acts as a compiler and dedicates a 
+main class.

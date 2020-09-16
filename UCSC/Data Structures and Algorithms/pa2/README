@@ -1,0 +1,18 @@
+-----------------------------------------------------------------------------
+ Nathan Basara
+ nbasara
+ pa2 Lex.c
+-----------------------------------------------------------------------------
+
+I was unable to completely flesh out the bugs within my program.  I completed 
+ListClient and are able to sort files to a given amount.  I was not capable of
+finding the source of this bug.  
+
+List.c - creates a doubly linked list that can be manipulated Lex.c and ListClient.C
+List.h - declares all functions created in List.c
+Lex.c - opens an input file and reads each individual charcter until "\n" is seen.
+        These characters are placed into a temporary array while compared with past 
+        lines in a two dimensional array.  The two dimensional array is sorted by
+        indeces from a linked list.  Once everyline is read and sorted, it gets printed
+        onto the output file.
+Makefile -  creates an executable for Lex.c and ListClient.c

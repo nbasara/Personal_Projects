@@ -1,0 +1,25 @@
+#    Nathan Basara    #
+## nbasara@ucssc.edu ##
+###      pa4        ###
+######           ######
+#######################
+List.java Matrix,java Sparse.java ListTest.java MatrixTest.java Makefile README
+
+
+The List file is used to construct the linked list.
+It points forwards and backwards so that you may 
+move in both directions.  There are some general 
+functions that can be performed on this linked list
+in order to change the contents.
+
+Graph creates an array of linked lists, and multiple arrays to assist 
+with BFS.  It then calls on functions within List to contruct and
+alter the graph.
+
+FindPath takes an input file and constructs our 
+graph using Graph.C.  Given our graph we run
+BFS on desired vertices and out the distance 
+from a source to a destination.  On top of this
+we print out the shortest path.
+
+GraphTest is a basic test to test the functions within graph.

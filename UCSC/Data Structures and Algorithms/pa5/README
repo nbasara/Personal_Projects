@@ -1,0 +1,25 @@
+#    Nathan Basara    #
+## nbasara@ucssc.edu ##
+###      pa5        ###
+######           ######
+#######################
+List.c List.h Graph.c Graph.h FindComponents.c GraphTest.c Makefile README
+
+
+The List file is used to construct the linked list.
+It points forwards and backwards so that you may 
+move in both directions.  There are some general 
+functions that can be performed on this linked list
+in order to change the contents.
+
+Graph creates an array of linked lists, and multiple arrays to assist 
+with DFS.  It then calls on functions within List to contruct and
+alter the graph.
+
+FindComponents takes an input file and constructs our 
+graph using Graph.C.  Given our graph we run
+DFS on the graph then on its transpose. Once DFS is run on the
+transpose the ascending finish times are strongly connected
+components.
+
+GraphTest is a basic test to test the functions within graph.
