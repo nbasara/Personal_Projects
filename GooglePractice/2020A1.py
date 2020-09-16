@@ -1,6 +1,6 @@
 
 t = int(input())  # read a line for number of cases
-for i in range(1, t + 1):
+for i in range(1, t + 1): #I hate how this looks on VIM
   houses = []
   n, m = [int(s) for s in input().split(" ")]  # n number of houses, budget
   houses = input().split(" ")
