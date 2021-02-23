@@ -5,5 +5,9 @@ Tasks:
 		What is the best way to be storing this data???? (currently python array of dictionaries)
 		Using Flask
 		
-	Build basic interface for website ......(Sort of like a mock up)
-	Build app(iOS) from the ground up that functions with API to receive wait time and locations
+	Build basic interface for website
+		HTML, CSS, JS to work with web api.
+	Build Database
+		Using MySQL for users login so that admins have tha ability to update Q Times
+		What Sites will have the queue information
+Design Changes: Don't want to build a phone app, just a web app that will be compatible with iphone and android.   Saves time and doesn't involve unnessary spending.  

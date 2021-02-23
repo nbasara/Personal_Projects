@@ -60,7 +60,7 @@ locations = {
         'update': '13:30',
         'phone': '805-652-7660'
         }
-
+}
 class Locations(Resource):
     def get(self, location_id):
         return {location_id: loactions[location_id]}
