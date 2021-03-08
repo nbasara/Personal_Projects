@@ -10,6 +10,12 @@ class MenuBar:
     def __init__(self, parent):
         self.menubar = Menu(parent)
         self.root = parent
+    
+    def startBar(self):
+        self.addFileMenu()
+        self.addEditMenu()
+        self.addPreferencesMenu()
+        self.addMetricsMenu()
 
     def addFileMenu(self):
         fm = FileMenu(self.menubar, self.root)
