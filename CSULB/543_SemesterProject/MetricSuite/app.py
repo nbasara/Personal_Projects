@@ -11,10 +11,12 @@ menubar.addFileMenu()
 menubar.addEditMenu()
 menubar.addPreferencesMenu()
 menubar.addMetricsMenu()
+
 menubar.addHelpMenu()
 tab = tabControl(root)
 tab.newTab()
 
 root.config(menu=menubar.menubar)
 root.mainloop()
+
 
