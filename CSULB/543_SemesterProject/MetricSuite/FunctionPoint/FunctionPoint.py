@@ -1,11 +1,6 @@
 from tkinter import *
 from tkinter import ttk
 from Languages.Languages import Languages
-from FunctionPoint.ExternalInputs.ExternalInputs import ExternalInputs
-from FunctionPoint.ExternalOutputs.ExternalOutputs import ExternalOutputs
-from FunctionPoint.ExternalInquiries.ExternalInquiries import ExternalInquiries
-from FunctionPoint.InternalLogicalFiles.InternalLogicalFiles import InternalLogicalFiles
-from FunctionPoint.ExternalInterfaceFiles.ExternalInterfaceFiles import ExternalInterfaceFiles
 
 class FunctionPoint:
 
@@ -71,12 +66,16 @@ class FunctionPoint:
         self.product_name = Product_Name
         self.creator = Creator
         self.comments = Comments
-        self.eiComplexity = External_Input_Complexity
-        self.eoComplexity = External_Ouput_Complexity
+        self.eiComplexity = IntVar()
+        self.eiComplexity.set(External_Input_Complexity)
+        self.eoComplexity = IntVar()
+        self.eoComplexity.set(External_Ouput_Complexity)
         self.eInqComplexity = IntVar()
         self.eInqComplexity.set(External_Inquiries_Complexity)
-        self.ilfComplexity = Internal_Logical_Files_Complexity
-        self.eifComplexity = External_Interface_Files_Complexity
+        self.ilfComplexity = IntVar()
+        self.ilfComplexity.set(Internal_Logical_Files_Complexity)
+        self.eifComplexity = IntVar()
+        self.eifComplexity.set(External_Interface_Files_Complexity)
         self.eiInput = External_Input_Input
         self.eoInput = External_Ouput_Input
         self.eInqInput = External_Inquiries_Input
@@ -107,6 +106,44 @@ class FunctionPoint:
         complexLabel.config(font=("Courier", 16))
         complexLabel.grid(row=1, column=4)
 
+    def displayExternalInputs(self):
+        eiLabel = Label(self.tab, text="External Inputs")
+        eiLabel.grid(row=2, column=0, padx=10, pady=10)
+
+        eiEntry = Entry(self.tab, width=10, borderwidth=5)
+        eiEntry.grid(row=2, column=1, padx=10, pady=10)
+
+        simpleRadio = Radiobutton(self.tab, text="3", variable=self.eiComplexity, value=3)
+        simpleRadio.grid(row=2, column=2, padx=10, pady=10)
+        
+        averageRadio = Radiobutton(self.tab, text="4", variable=self.eiComplexity, value=4)
+        averageRadio.grid(row=2, column=3, padx=10, pady=10)
+
+        complexRadio = Radiobutton(self.tab, text="6", variable=self.eiComplexity, value=6)
+        complexRadio.grid(row=2, column=4, padx=10, pady=10)
+
+        calculationLabel = Label(self.tab, text="     ", width=10, relief="groove")
+        calculationLabel.grid(row=2, column=5, padx=10, pady=10)
+    
+    def displayExternlOutputs(self):
+        eoLabel = Label(self.tab, text="External Outputs")
+        eoLabel.grid(row=3, column=0, padx=10, pady=10)
+
+        eoEntry = Entry(self.tab, width=10, borderwidth=5)
+        eoEntry.grid(row=3, column=1, padx=10, pady=10)
+
+        simpleRadio = Radiobutton(self.tab, text="4", variable=self.eoComplexity, value=4)
+        simpleRadio.grid(row=3, column=2, padx=10, pady=10)
+        
+        averageRadio = Radiobutton(self.tab, text="5", variable=self.eoComplexity, value=5)
+        averageRadio.grid(row=3, column=3, padx=10, pady=10)
+
+        complexRadio = Radiobutton(self.tab, text="7", variable=self.eoComplexity, value=7)
+        complexRadio.grid(row=3, column=4, padx=10, pady=10)
+
+        calculationLabel = Label(self.tab, text="     ", width=10, relief="groove")
+        calculationLabel.grid(row=3, column=5, padx=10, pady=10)
+
     def displayExternalInquiries(self):
         eiLabel = Label(self.tab, text="External Inquiries")
         eiLabel.grid(row=4, column=0, padx=10, pady=10)
@@ -125,6 +162,44 @@ class FunctionPoint:
 
         calculationLabel = Label(self.tab, text="     ", width=10, relief="groove")
         calculationLabel.grid(row=4, column=5, padx=10, pady=10)
+
+    def displayInternalLogicalFiles(self):
+        ilfLabel = Label(self.tab, text="Internal Logic Files")
+        ilfLabel.grid(row=5, column=0, padx=10, pady=10)
+
+        ilfEntry = Entry(self.tab, width=10, borderwidth=5)
+        ilfEntry.grid(row=5, column=1, padx=10, pady=10)
+
+        simpleRadio = Radiobutton(self.tab, text="7", variable=self.ilfComplexity, value=7)
+        simpleRadio.grid(row=5, column=2, padx=10, pady=10)
+        
+        averageRadio = Radiobutton(self.tab, text="10", variable=self.ilfComplexity, value=10)
+        averageRadio.grid(row=5, column=3, padx=10, pady=10)
+
+        complexRadio = Radiobutton(self.tab, text="15", variable=self.ilfComplexity, value=15)
+        complexRadio.grid(row=5, column=4, padx=10, pady=10)
+
+        calculationLabel = Label(self.tab, text="     ", width=10, relief="groove")
+        calculationLabel.grid(row=5, column=5, padx=10, pady=10)
+
+    def displayExternalInterfaceFiles(self):
+        elfLabel = Label(self.tab, text="External Interface Files")
+        elfLabel.grid(row=6, column=0, padx=10, pady=10)
+
+        elfEntry = Entry(self.tab, width=10, borderwidth=5)
+        elfEntry.grid(row=6, column=1, padx=10, pady=10)
+
+        simpleRadio = Radiobutton(self.tab, text="5", variable=self.eifComplexity, value=5)
+        simpleRadio.grid(row=6, column=2, padx=10, pady=10)
+        
+        averageRadio = Radiobutton(self.tab, text="7", variable=self.eifComplexity, value=7)
+        averageRadio.grid(row=6, column=3, padx=10, pady=10)
+
+        complexRadio = Radiobutton(self.tab, text="10", variable=self.eifComplexity, value=10)
+        complexRadio.grid(row=6, column=4, padx=10, pady=10)
+
+        calculationLabel = Label(self.tab, text="     ", width=10, relief="groove")
+        calculationLabel.grid(row=6, column=5, padx=10, pady=10)
 
     def totalRow(self):
         totalLabel = Label(self.tab, text="Total Count")
@@ -176,15 +251,11 @@ class FunctionPoint:
         self.tab = ttk.Frame(parent)
         self.titleFrame()
         self.complexities()
-        ei = ExternalInputs(self.tab)
-        ei.displayExternalInputs()
-        eo = ExternalOutputs(self.tab)
-        eo.displayExternlOutputs()
+        self.displayExternalInputs()
+        self.displayExternlOutputs()
         self.displayExternalInquiries()
-        ilf = InternalLogicalFiles(self.tab)
-        ilf.displayInternalLogicalFiles()
-        eif =  ExternalInterfaceFiles(self.tab)
-        eif.displayExternalInterfaceFiles()
+        self.displayInternalLogicalFiles()
+        self.displayExternalInterfaceFiles()
         self.totalRow()
         self.computeFP()
         self.valueAdjustments()
