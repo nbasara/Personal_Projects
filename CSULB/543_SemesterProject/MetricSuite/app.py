@@ -4,10 +4,12 @@ from Tabs.TabControl import tabControl
 
 class program:
 
+
     def __init__(self):
         self.root = Tk()
 
 def main():
+    
     root = Tk()
     #setting default value for window
     root.geometry("1000x800")

@@ -8,6 +8,50 @@ from FunctionPoint.ExternalInterfaceFiles.ExternalInterfaceFiles import External
 
 class FunctionPoint:
 
+    def valueAdjustmentsWindow(self):
+
+        valueAdjustmentFactors = [
+            "Does the system require reliable back and recovery processes?",
+            "Are specialize data communications required to transfer information to or from the application?",
+            "Are there distributed processing functions?",
+            "Is performance critical",
+            "Will the system run in an existing, heavily utilized operational environment?",
+            "Will the system require online data entry?",
+            "Does the online data entry require the input transaction to be built over multiple screens or operations?",
+            "Are the internal logical files updated online?",
+            "Are the input, ouput, files or inquires complex?",
+            "Is the code designed to be reusable?",
+            "Are conversion and installation included in the deign?",
+            "Is the system designed or multiple installations in different organizations?",
+            "Is the application designed to facilitate change and for ease of use by the user?"
+        ]
+
+        window = Toplevel()
+        window.title("Value Adjustment Factors")
+
+        directionLabel = Label(window, text="Assign a value from 0 to 5 for each of the following Value Adjustment Factors:")
+        directionLabel.grid(row=0, column=0)
+        values = []
+
+        for i in range(0, len(valueAdjustmentFactors)):
+            label = Label(window, text=valueAdjustmentFactors[i])
+            label.grid(row=i+1, column=0, sticky="W")
+            variable = IntVar()
+            variable.set(0)
+            values.append(variable)
+            dropDown = OptionMenu(window, values[i], 0, 1, 2, 3, 4, 5)
+            dropDown.grid(row=i+1, column=1)
+
+        buttonFrame = Frame(window)
+        doneButton = Button(buttonFrame, text="Done")
+        doneButton.grid(row=0, column=0)
+        cancelButton = Button(buttonFrame, text="Cancel")
+        cancelButton.grid(row=0, column=1)
+        buttonFrame.grid(row=len(valueAdjustmentFactors)+1, column=0)
+
+
+
+
     def __init__(self, Project_Name="untitled", Product_Name=None, Creator=None, Comments=None):
         self.project_name = Project_Name
         self.product_name = Product_Name
@@ -48,7 +92,7 @@ class FunctionPoint:
         fpSum.grid(row=8, column=5, padx=10, pady=10)
 
     def valueAdjustments(self, parent):
-        vaButton = Button(parent, text="Value Adjustments")
+        vaButton = Button(parent, text="Value Adjustments", command=self.valueAdjustmentsWindow)
         vaButton.grid(row=9, column=0, padx=10, pady=10)
 
         vaSum = Label(parent, text="     ", width=10, relief="groove")
