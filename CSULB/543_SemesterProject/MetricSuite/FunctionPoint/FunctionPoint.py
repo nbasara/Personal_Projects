@@ -77,10 +77,15 @@ class FunctionPoint:
         self.eifComplexity = IntVar()
         self.eifComplexity.set(External_Interface_Files_Complexity)
         self.eiInput = External_Input_Input
+        self.eiEntry = None
         self.eoInput = External_Ouput_Input
+        self.eoEntry = None
         self.eInqInput = External_Inquiries_Input
+        self.eInqEntry = None
         self.ilfInput = Internal_Logical_Files_Input
+        self.ilfEntry = None
         self.eifInput = External_Interface_Files_Input
+        self.eifEntry = None
         self.VAF = Value_Adjustment_Factors
         self.language = Language
         self.inputTotal = Input_Total
@@ -110,8 +115,8 @@ class FunctionPoint:
         eiLabel = Label(self.tab, text="External Inputs")
         eiLabel.grid(row=2, column=0, padx=10, pady=10)
 
-        eiEntry = Entry(self.tab, width=10, borderwidth=5)
-        eiEntry.grid(row=2, column=1, padx=10, pady=10)
+        self.eiEntry = Entry(self.tab, textvariable=StringVar(value=str(self.eiInput)), width=10, borderwidth=5)
+        self.eiEntry.grid(row=2, column=1, padx=10, pady=10)
 
         simpleRadio = Radiobutton(self.tab, text="3", variable=self.eiComplexity, value=3)
         simpleRadio.grid(row=2, column=2, padx=10, pady=10)
@@ -125,12 +130,13 @@ class FunctionPoint:
         calculationLabel = Label(self.tab, text="     ", width=10, relief="groove")
         calculationLabel.grid(row=2, column=5, padx=10, pady=10)
     
+    
     def displayExternlOutputs(self):
         eoLabel = Label(self.tab, text="External Outputs")
         eoLabel.grid(row=3, column=0, padx=10, pady=10)
 
-        eoEntry = Entry(self.tab, width=10, borderwidth=5)
-        eoEntry.grid(row=3, column=1, padx=10, pady=10)
+        self.eoEntry = Entry(self.tab, textvariable=StringVar(value=str(self.eoInput)), width=10, borderwidth=5)
+        self.eoEntry.grid(row=3, column=1, padx=10, pady=10)
 
         simpleRadio = Radiobutton(self.tab, text="4", variable=self.eoComplexity, value=4)
         simpleRadio.grid(row=3, column=2, padx=10, pady=10)
@@ -148,8 +154,8 @@ class FunctionPoint:
         eiLabel = Label(self.tab, text="External Inquiries")
         eiLabel.grid(row=4, column=0, padx=10, pady=10)
 
-        eiEntry = Entry(self.tab, width=10, borderwidth=5)
-        eiEntry.grid(row=4, column=1, padx=10, pady=10)
+        self.eInqEntry = Entry(self.tab, textvariable=StringVar(value=str(self.eInqInput)), width=10, borderwidth=5)
+        self.eInqEntry.grid(row=4, column=1, padx=10, pady=10)
 
         simpleRadio = Radiobutton(self.tab, text="3", variable=self.eInqComplexity, value=3)
         simpleRadio.grid(row=4, column=2, padx=10, pady=10)
@@ -167,8 +173,8 @@ class FunctionPoint:
         ilfLabel = Label(self.tab, text="Internal Logic Files")
         ilfLabel.grid(row=5, column=0, padx=10, pady=10)
 
-        ilfEntry = Entry(self.tab, width=10, borderwidth=5)
-        ilfEntry.grid(row=5, column=1, padx=10, pady=10)
+        self.ilfEntry = Entry(self.tab, textvariable=StringVar(value=str(self.ilfInput)), width=10, borderwidth=5)
+        self.ilfEntry.grid(row=5, column=1, padx=10, pady=10)
 
         simpleRadio = Radiobutton(self.tab, text="7", variable=self.ilfComplexity, value=7)
         simpleRadio.grid(row=5, column=2, padx=10, pady=10)
@@ -186,8 +192,8 @@ class FunctionPoint:
         elfLabel = Label(self.tab, text="External Interface Files")
         elfLabel.grid(row=6, column=0, padx=10, pady=10)
 
-        elfEntry = Entry(self.tab, width=10, borderwidth=5)
-        elfEntry.grid(row=6, column=1, padx=10, pady=10)
+        self.eifEntry = Entry(self.tab, textvariable=StringVar(value=str(self.eifInput)), width=10, borderwidth=5)
+        self.eifEntry.grid(row=6, column=1, padx=10, pady=10)
 
         simpleRadio = Radiobutton(self.tab, text="5", variable=self.eifComplexity, value=5)
         simpleRadio.grid(row=6, column=2, padx=10, pady=10)
@@ -209,7 +215,50 @@ class FunctionPoint:
         outputLabel.grid(row=7, column=5, padx=10, pady=10)
 
     def computeFP(self):
-        fpButton = Button(self.tab, text="Compute FP")
+        def calculation():
+            self.inputTotal = 0
+            if int(self.eiEntry.get()) < 0:
+                return
+            else:
+                eiCalc = int(self.eiEntry.get()) * self.eiComplexity.get()
+                calculationLabel = Label(self.tab, text=str(eiCalc), width=10, relief="groove")
+                calculationLabel.grid(row=2, column=5, padx=10, pady=10)
+                self.inputTotal += eiCalc
+            if int(self.eoEntry.get()) < 0:
+                return
+            else:
+                eoCalc = int(self.eoEntry.get()) * self.eoComplexity.get()
+                calculationLabel = Label(self.tab, text=str(eoCalc), width=10, relief="groove")
+                calculationLabel.grid(row=3, column=5, padx=10, pady=10)
+                self.inputTotal += eoCalc
+            if int(self.eInqEntry.get()) < 0:
+                return
+            else:
+                eInqCalc = int(self.eInqEntry.get()) * self.eInqComplexity.get()
+                calculationLabel = Label(self.tab, text=str(eInqCalc), width=10, relief="groove")
+                calculationLabel.grid(row=4, column=5, padx=10, pady=10)
+                self.inputTotal += eInqCalc
+            if int(self.ilfEntry.get()) < 0:
+                return
+            else:
+                ilfCalc = int(self.ilfEntry.get()) * self.ilfComplexity.get()
+                calculationLabel = Label(self.tab, text=str(ilfCalc), width=10, relief="groove")
+                calculationLabel.grid(row=5, column=5, padx=10, pady=10)
+                self.inputTotal += ilfCalc
+            if int(self.eiEntry.get()) < 0:
+                return
+            else:
+                eifCalc = int(self.eifEntry.get()) * self.eifComplexity.get()
+                calculationLabel = Label(self.tab, text=str(eifCalc), width=10, relief="groove")
+                calculationLabel.grid(row=6, column=5, padx=10, pady=10)
+                self.inputTotal += eifCalc
+            outputLabel = Label(self.tab, text=str(self.inputTotal), width=10, relief="groove")
+            outputLabel.grid(row=7, column=5, padx=10, pady=10)
+            self.functionPointCalc = int(self.inputTotal * (0.65 + 0.01 * self.VAFtotal))
+            fpSum = Label(self.tab, text=str(self.functionPointCalc), width=10, relief="groove")
+            fpSum.grid(row=8, column=5, padx=10, pady=10)
+
+        fpButton = Button(self.tab, text="Compute FP", command=calculation)
         fpButton.grid(row=8, column=0, padx=10, pady=10)
 
         fpSum = Label(self.tab, text="     ", width=10, relief="groove")
