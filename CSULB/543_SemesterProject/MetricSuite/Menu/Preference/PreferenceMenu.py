@@ -20,5 +20,5 @@ class PreferenceMenu:
         doneButton = Button(LanguageSelector, text="Done", command=lambda: done(language.get())).pack()
 
     def __init__(self, parent):
-        self.preferencesmenu = Menu(parent, tearoff=0)
+        self.preferencesmenu = Menu(parent.menubar, tearoff=0)
         self.preferencesmenu.add_command(label="Language", command=self.openLanguageMenu)

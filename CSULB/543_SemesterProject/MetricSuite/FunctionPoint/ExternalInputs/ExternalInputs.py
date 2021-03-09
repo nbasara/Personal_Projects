@@ -5,7 +5,7 @@ class ExternalInputs:
     def __init__(self, Parent):
         self.userInput = 0
         self.complexityValue = IntVar()
-        self.complexityValue.set("5")
+        self.complexityValue.set("4")
         self.parent = Parent
 
     def displayExternalInputs(self):

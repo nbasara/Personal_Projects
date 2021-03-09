@@ -23,17 +23,17 @@ class MenuBar:
         self.menubar.add_cascade(label="File", menu=fm.filemenu)
     
     def addEditMenu(self):
-        em =  EditMenu(self.menubar)
+        em =  EditMenu(self)
         self.menubar.add_cascade(label="Edit", menu=em.editmenu)
     
     def addPreferencesMenu(self):
-        pm =  PreferenceMenu(self.menubar)
+        pm =  PreferenceMenu(self)
         self.menubar.add_cascade(label="Preferences", menu=pm.preferencesmenu)
     
     def addMetricsMenu(self):
-        pm =  MetricsMenu(self.menubar)
+        pm =  MetricsMenu(self)
         self.menubar.add_cascade(label="Metrics", menu=pm.metricsmenu)
     
     def addHelpMenu(self):
-        hm =  HelpMenu(self.menubar)
+        hm =  HelpMenu(self)
         self.menubar.add_cascade(label="Help", menu=hm.helpmenu)
