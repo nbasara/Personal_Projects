@@ -8,7 +8,7 @@ from Menu.Help.HelpMenu import HelpMenu
 class MenuBar:
 
     def __init__(self, parent):
-        self.menubar = Menu(parent)
+        self.menubar = Menu(parent.root)
         self.root = parent
     
     def startBar(self):
@@ -16,9 +16,10 @@ class MenuBar:
         self.addEditMenu()
         self.addPreferencesMenu()
         self.addMetricsMenu()
+        self.addHelpMenu()
 
     def addFileMenu(self):
-        fm = FileMenu(self.menubar, self.root)
+        fm = FileMenu(self)
         self.menubar.add_cascade(label="File", menu=fm.filemenu)
     
     def addEditMenu(self):
