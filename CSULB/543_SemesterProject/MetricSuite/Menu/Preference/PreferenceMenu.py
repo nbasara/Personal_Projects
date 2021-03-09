@@ -11,12 +11,11 @@ class PreferenceMenu:
 
         def done(language):
             LanguageSettings.changeLanguage(str(language))
-            print(LanguageSettings.getLanguage())
             LanguageSelector.destroy()
 
         prompt = Label(LanguageSelector, text="Select one language", padx=10).pack()
-        for names in LanguageSettings.LanguageList:
-            Radiobutton(LanguageSelector, text=names["name"], variable=language, value=names["name"]).pack(anchor=W)
+        for name, avg in LanguageSettings.LanguageList.items():
+            Radiobutton(LanguageSelector, text=name, variable=language, value=name).pack(anchor=W)
         doneButton = Button(LanguageSelector, text="Done", command=lambda: done(language.get())).pack()
 
     def __init__(self, parent):

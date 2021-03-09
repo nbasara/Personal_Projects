@@ -53,6 +53,24 @@ class FunctionPoint:
         cancelButton.grid(row=0, column=1)
         buttonFrame.grid(row=len(valueAdjustmentFactors)+1, column=0)
 
+    def openLanguageMenu(self):
+        LanguageSetting = Languages()
+        LanguageSelector = Toplevel()
+        language = StringVar()
+        language.set(LanguageSetting.getLanguage())
+
+        def done(language):
+            self.language = str(language)
+            self.languageAverage = LanguageSetting.LanguageList.get(self.language)
+            currentLanguage = Label(self.tab, text=self.language, width=10, relief="groove")
+            currentLanguage.grid(row=10, column=3, padx=10, pady=10)
+            LanguageSelector.destroy()
+
+        prompt = Label(LanguageSelector, text="Select one language", padx=10).pack()
+        for name, avg in LanguageSetting.LanguageList.items():
+            Radiobutton(LanguageSelector, text=name, variable=language, value=name).pack(anchor=W)
+        doneButton = Button(LanguageSelector, text="Done", command=lambda: done(language.get())).pack()
+
 
 
 
@@ -60,7 +78,7 @@ class FunctionPoint:
              External_Ouput_Complexity=5, External_Inquiries_Complexity=4, Internal_Logical_Files_Complexity=10, 
              External_Interface_Files_Complexity=7, External_Input_Input=0, External_Ouput_Input=0, External_Inquiries_Input=0,
              Internal_Logical_Files_Input=0, External_Interface_Files_Input=0, Value_Adjustment_Factors=[0,0,0,0,0,0,0,0,0,0,0,0,0],
-             Language=LanguageSetting.getLanguage(), Input_Total=0, Function_Point_Calculation=0):
+             Language=LanguageSetting.getLanguage(), Language_Average = LanguageSetting.getAverage(), Input_Total=0, Function_Point_Calculation=0):
         self.tab = None
         self.project_name = Project_Name
         self.product_name = Product_Name
@@ -88,9 +106,11 @@ class FunctionPoint:
         self.eifEntry = None
         self.VAF = Value_Adjustment_Factors
         self.language = Language
+        self.languageAverage = Language_Average
         self.inputTotal = Input_Total
         self.functionPointCalc = Function_Point_Calculation
         self.VAFtotal = 0
+        self.codeSize = 0
 
     def titleFrame(self):
         titleLabel = Label(self.tab, text="Weighting Factors")
@@ -254,7 +274,7 @@ class FunctionPoint:
                 self.inputTotal += eifCalc
             outputLabel = Label(self.tab, text=str(self.inputTotal), width=10, relief="groove")
             outputLabel.grid(row=7, column=5, padx=10, pady=10)
-            self.functionPointCalc = int(self.inputTotal * (0.65 + 0.01 * self.VAFtotal))
+            self.functionPointCalc = self.inputTotal * (0.65 + 0.01 * self.VAFtotal)
             fpSum = Label(self.tab, text=str(self.functionPointCalc), width=10, relief="groove")
             fpSum.grid(row=8, column=5, padx=10, pady=10)
 
@@ -280,20 +300,26 @@ class FunctionPoint:
         vaSum.grid(row=9, column=5, padx=10, pady=10)
     
     def computeCodeSize(self):
-        ccsButton = Button(self.tab, text="Compute Code Size")
+
+        def calcCodeSize():
+            self.codeSize = self.languageAverage * self.functionPointCalc
+            ccsSum = Label(self.tab, text=str(self.codeSize), width=10, relief="groove")
+            ccsSum.grid(row=10, column=5, padx=10, pady=10)
+
+        ccsButton = Button(self.tab, text="Compute Code Size", command=calcCodeSize)
         ccsButton.grid(row=10, column=0, padx=10, pady=10)
 
         clLabel = Label(self.tab, text="Current Language")
         clLabel.grid(row=10, column=2, padx=10, pady=10)
 
-        currentLanguage = Label(self.tab, text="Java", width=10, relief="groove")
+        currentLanguage = Label(self.tab, text=self.language, width=10, relief="groove")
         currentLanguage.grid(row=10, column=3, padx=10, pady=10)  
 
         ccsSum = Label(self.tab, text="     ", width=10, relief="groove")
         ccsSum.grid(row=10, column=5, padx=10, pady=10)
 
     def changeLanguage(self):
-        changeLanguageButton = Button(self.tab, text="Change Language")
+        changeLanguageButton = Button(self.tab, text="Change Language", command=self.openLanguageMenu)
         changeLanguageButton.grid(row=11, column=0, padx=10, pady=10)   
 
     def newFunctionPoint(self, parent):
