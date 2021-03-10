@@ -1,6 +1,10 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter.filedialog import asksaveasfile
+from tkinter.filedialog import askopenfile 
+from tkinter import messagebox  
 from FunctionPoint.FunctionPoint import FunctionPoint
+import json
 
 class FileMenu:
 
@@ -49,7 +53,63 @@ class FileMenu:
 
         cancelButton = Button(newProjectWindow, text="Cancel", command=newProjectWindow.destroy)
         cancelButton.grid(row=6, column=1, padx=5, pady=5)
+
+    def functionPointJson(self, fpWindow):
+        content = {
+            "language": fpWindow.language,
+            "languageAverage": fpWindow.languageAverage,
+            "VAF": fpWindow.VAF,
+            "eiComplexity": fpWindow.eiComplexity.get(),
+            "eoComplexity": fpWindow.eoComplexity.get(),
+            "eInqComplexity": fpWindow.eInqComplexity.get(),
+            "ilfComplexity": fpWindow.ilfComplexity.get(),
+            "eifComplexity": fpWindow.eifComplexity.get(),
+            "eiInput": fpWindow.eiInput,
+            "eoInput": fpWindow.eoInput,
+            "eInqInput": fpWindow.eInqInput,
+            "ilfInput": fpWindow.ilfInput,
+            "eifInput": fpWindow.eifInput,
+            "inputTotal": fpWindow.inputTotal,
+            "functionPointCalc": fpWindow.functionPointCalc
+        }
+        return content
+
+    def projectSave(self):
+        #are we working on a project?
+        if self.root.project == None:
+            messagebox.showerror("Error", "Please start or load a project before trying to save.")
+            return
+        f = asksaveasfile(filetypes=[('Metric Suite Files', '*.ms')], defaultextension=".ms")
+        #did the user hit cancel
+        if f is None:
+            return
+        contents = {
+            "projectName" : self.root.project.projectName,
+            "productName" : self.root.project.productName,
+            "creator": self.root.project.creator,
+            "comment": self.root.project.comment,
+            "fpWindows": []
+        }
+        for fpWindow in self.root.project.fpWindows:
+            windowContent = self.functionPointJson(fpWindow)
+            contents["fpWindows"].append(windowContent)
+        jsonContents = json.dumps(contents)
+
+        f.write(jsonContents)
+        f.close()
         
+    def openProjcet(self):
+        if self.root.project:
+            messagebox.showerror("Error", "There is currently a project open.")
+            return
+        f = askopenfile(mode='r', filetypes =[('Metric Suite Files', '*.ms')])
+        jsonContents = f.read()
+        f.close()
+        contents = json.loads(jsonContents)
+        self.root.addNewProject(contents["projectName"], contents["productName"],
+                                    contents["creator"], contents["comment"])
+        for fpWindow in contents["fpWindows"]:
+            self.root.loadFunctionPoint(fpWindow)
 
     def donothing(self):
         pass
@@ -58,7 +118,7 @@ class FileMenu:
         self.filemenu = Menu(parent.menubar, tearoff=0)
         self.root = parent.root
         self.filemenu.add_command(label="New", command=self.openNewProject)
-        self.filemenu.add_command(label="Open", command=self.donothing)
-        self.filemenu.add_command(label="Save", command=self.donothing)
+        self.filemenu.add_command(label="Open", command=self.openProjcet)
+        self.filemenu.add_command(label="Save", command=self.projectSave)
         self.filemenu.add_separator()
         self.filemenu.add_command(label="Exit", command=parent.root.root.quit)

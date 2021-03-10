@@ -104,7 +104,7 @@ class FunctionPoint:
         self.languageAverage = Language_Average
         self.inputTotal = Input_Total
         self.functionPointCalc = Function_Point_Calculation
-        self.VAFtotal = 0
+        self.VAFtotal = sum(Value_Adjustment_Factors)
         self.codeSize = 0
 
     def titleFrame(self):
@@ -142,7 +142,7 @@ class FunctionPoint:
         complexRadio = Radiobutton(self.tab, text="6", variable=self.eiComplexity, value=6)
         complexRadio.grid(row=2, column=4, padx=10, pady=10)
 
-        calculationLabel = Label(self.tab, text="     ", width=10, relief="groove")
+        calculationLabel = Label(self.tab, text=str((int(self.eiInput) * int(self.eiComplexity.get()))), width=10, relief="groove")
         calculationLabel.grid(row=2, column=5, padx=10, pady=10)
     
     
@@ -162,7 +162,7 @@ class FunctionPoint:
         complexRadio = Radiobutton(self.tab, text="7", variable=self.eoComplexity, value=7)
         complexRadio.grid(row=3, column=4, padx=10, pady=10)
 
-        calculationLabel = Label(self.tab, text="     ", width=10, relief="groove")
+        calculationLabel = Label(self.tab, text=str((int(self.eoInput) * int(self.eoComplexity.get()))), width=10, relief="groove")
         calculationLabel.grid(row=3, column=5, padx=10, pady=10)
 
     def displayExternalInquiries(self):
@@ -181,7 +181,7 @@ class FunctionPoint:
         complexRadio = Radiobutton(self.tab, text="6", variable=self.eInqComplexity, value=6)
         complexRadio.grid(row=4, column=4, padx=10, pady=10)
 
-        calculationLabel = Label(self.tab, text="     ", width=10, relief="groove")
+        calculationLabel = Label(self.tab, text=str((int(self.eInqInput) * int(self.eInqComplexity.get()))), width=10, relief="groove")
         calculationLabel.grid(row=4, column=5, padx=10, pady=10)
 
     def displayInternalLogicalFiles(self):
@@ -200,7 +200,7 @@ class FunctionPoint:
         complexRadio = Radiobutton(self.tab, text="15", variable=self.ilfComplexity, value=15)
         complexRadio.grid(row=5, column=4, padx=10, pady=10)
 
-        calculationLabel = Label(self.tab, text="     ", width=10, relief="groove")
+        calculationLabel = Label(self.tab, text=str((int(self.ilfInput) * int(self.ilfComplexity.get()))), width=10, relief="groove")
         calculationLabel.grid(row=5, column=5, padx=10, pady=10)
 
     def displayExternalInterfaceFiles(self):
@@ -219,14 +219,14 @@ class FunctionPoint:
         complexRadio = Radiobutton(self.tab, text="10", variable=self.eifComplexity, value=10)
         complexRadio.grid(row=6, column=4, padx=10, pady=10)
 
-        calculationLabel = Label(self.tab, text="     ", width=10, relief="groove")
+        calculationLabel = Label(self.tab, text=str((int(self.eifInput) * int(self.eifComplexity.get()))), width=10, relief="groove")
         calculationLabel.grid(row=6, column=5, padx=10, pady=10)
 
     def totalRow(self):
         totalLabel = Label(self.tab, text="Total Count")
         totalLabel.grid(row=7, column=0, padx=10, pady=10)
 
-        outputLabel = Label(self.tab, text="     ", width=10, relief="groove")
+        outputLabel = Label(self.tab, text=str(self.inputTotal), width=10, relief="groove")
         outputLabel.grid(row=7, column=5, padx=10, pady=10)
 
     def computeFP(self):
@@ -239,6 +239,7 @@ class FunctionPoint:
                 messagebox.showerror("Error", "Please Enter a non-negative number in External Input")
                 return
             else:
+                self.eiInput = self.eiEntry.get()
                 eiCalc = int(self.eiEntry.get()) * self.eiComplexity.get()
                 calculationLabel = Label(self.tab, text=str(eiCalc), width=10, relief="groove")
                 calculationLabel.grid(row=2, column=5, padx=10, pady=10)
@@ -250,6 +251,7 @@ class FunctionPoint:
                 messagebox.showerror("Error", "Please Enter a non-negative number in External Output")
                 return
             else:
+                self.eoInput = self.eoEntry.get()
                 eoCalc = int(self.eoEntry.get()) * self.eoComplexity.get()
                 calculationLabel = Label(self.tab, text=str(eoCalc), width=10, relief="groove")
                 calculationLabel.grid(row=3, column=5, padx=10, pady=10)
@@ -261,6 +263,7 @@ class FunctionPoint:
                 messagebox.showerror("Error", "Please Enter a non-negative number in External Inquiries")
                 return
             else:
+                self.eInqInput = self.eInqEntry.get()
                 eInqCalc = int(self.eInqEntry.get()) * self.eInqComplexity.get()
                 calculationLabel = Label(self.tab, text=str(eInqCalc), width=10, relief="groove")
                 calculationLabel.grid(row=4, column=5, padx=10, pady=10)
@@ -272,6 +275,7 @@ class FunctionPoint:
                 messagebox.showerror("Error", "Please Enter a non-negative number in Internal Logical Files")
                 return
             else:
+                self.ilfInput = self.ilfEntry.get()
                 ilfCalc = int(self.ilfEntry.get()) * self.ilfComplexity.get()
                 calculationLabel = Label(self.tab, text=str(ilfCalc), width=10, relief="groove")
                 calculationLabel.grid(row=5, column=5, padx=10, pady=10)
@@ -283,6 +287,7 @@ class FunctionPoint:
                 messagebox.showerror("Error", "Please Enter a non-negative number in External Interface Files")
                 return
             else:
+                self.eifInput = self.eifEntry.get()
                 eifCalc = int(self.eifEntry.get()) * self.eifComplexity.get()
                 calculationLabel = Label(self.tab, text=str(eifCalc), width=10, relief="groove")
                 calculationLabel.grid(row=6, column=5, padx=10, pady=10)
@@ -296,7 +301,7 @@ class FunctionPoint:
         fpButton = Button(self.tab, text="Compute FP", command=calculation)
         fpButton.grid(row=8, column=0, padx=10, pady=10)
 
-        fpSum = Label(self.tab, text="     ", width=15, relief="groove")
+        fpSum = Label(self.tab, text=f"{self.functionPointCalc:,.2f}", width=15, relief="groove")
         fpSum.grid(row=8, column=5, padx=10, pady=10)
 
     def valueAdjustments(self):

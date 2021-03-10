@@ -39,6 +39,8 @@ class program:
                             Comments=comments
                             )
             self.root.title("CECS 543 Metrics Suite - " + "untitled")
+        if len(self.tempFP) >= 1:
+            self.projcet.fpWindows = self.tempFP
     
     def addNewFunctionPoint(self):
         fp = FunctionPoint(Language=self.languages.getLanguage(), 
@@ -49,6 +51,16 @@ class program:
             self.tempFP.append(fp)
         fp.newFunctionPoint(self.tab)
 
+    def loadFunctionPoint(self, fp):
+        loadFP = FunctionPoint(Language=fp["language"], Language_Average=fp["languageAverage"], Value_Adjustment_Factors=fp["VAF"],
+                            External_Input_Complexity=fp["eiComplexity"], External_Ouput_Complexity=fp["eoComplexity"],
+                            External_Inquiries_Complexity=fp["eInqComplexity"], Internal_Logical_Files_Complexity=fp["ilfComplexity"],
+                            External_Interface_Files_Complexity=fp["eifComplexity"], External_Input_Input=fp["eiInput"],
+                            External_Ouput_Input=fp["eoInput"], External_Inquiries_Input=fp["eInqInput"],
+                            Internal_Logical_Files_Input=fp["ilfInput"], External_Interface_Files_Input=fp["eifInput"],
+                            Input_Total=fp["inputTotal"], Function_Point_Calculation=fp["functionPointCalc"])
+        self.project.fpWindows.append(loadFP)
+        loadFP.newFunctionPoint(self.tab)
 
     def startNewTab(self):
         self.tab = ttk.Notebook(self.root)
