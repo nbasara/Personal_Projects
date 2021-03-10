@@ -12,22 +12,13 @@ class FileMenu:
         titleLabel.grid(row=0, column=0, columnspan=2, padx=20, pady=20)
 
         def start():
-            if self.root.getTab() == None:
-                #create new tab
-                self.root.startNewTab()
-                #create new FunctionPointProject
-                self.root.addNewProject(
-                                str(projectNameForm.get()), str(productNameForm.get()),
-                                str(creatorForm.get()), str(commentForm.get("1.0", 'end-1c'))
-                                )
-                #close temp window
-                newProjectWindow.destroy()
-            else:
-                self.root.addNewProject(
-                                str(projectNameForm.get()), str(productNameForm.get()),
-                                str(creatorForm.get()), str(commentForm.get("1.0", 'end-1c'))
-                                )
-                newProjectWindow.destroy()
+            #create new FunctionPointProject
+            self.root.addNewProject(
+                            str(projectNameForm.get()), str(productNameForm.get()),
+                            str(creatorForm.get()), str(commentForm.get("1.0", 'end-1c'))
+                            )
+            #close temp window
+            newProjectWindow.destroy()
 
         projectNameLabel = Label(newProjectWindow, text="Project Name:")
         projectNameLabel.grid(row=1, column=0, padx=3, pady=5)

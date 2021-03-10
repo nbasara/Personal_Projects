@@ -1,10 +1,9 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox 
 from Languages.Languages import Languages
 
 class FunctionPoint:
-
-    LanguageSetting = Languages()
 
     def valueAdjustmentsWindow(self):
 
@@ -74,16 +73,12 @@ class FunctionPoint:
 
 
 
-    def __init__(self, Project_Name="untitled", Product_Name=None, Creator=None, Comments=None, External_Input_Complexity=4,
-             External_Ouput_Complexity=5, External_Inquiries_Complexity=4, Internal_Logical_Files_Complexity=10, 
-             External_Interface_Files_Complexity=7, External_Input_Input=0, External_Ouput_Input=0, External_Inquiries_Input=0,
-             Internal_Logical_Files_Input=0, External_Interface_Files_Input=0, Value_Adjustment_Factors=[0,0,0,0,0,0,0,0,0,0,0,0,0],
-             Language=LanguageSetting.getLanguage(), Language_Average = LanguageSetting.getAverage(), Input_Total=0, Function_Point_Calculation=0):
+    def __init__(self, External_Input_Complexity=4,External_Ouput_Complexity=5, External_Inquiries_Complexity=4, 
+            Internal_Logical_Files_Complexity=10, External_Interface_Files_Complexity=7, External_Input_Input=0, 
+            External_Ouput_Input=0, External_Inquiries_Input=0, Internal_Logical_Files_Input=0, 
+            External_Interface_Files_Input=0, Value_Adjustment_Factors=[0,0,0,0,0,0,0,0,0,0,0,0,0], Language="None", 
+            Language_Average = 0, Input_Total=0, Function_Point_Calculation=0):
         self.tab = None
-        self.project_name = Project_Name
-        self.product_name = Product_Name
-        self.creator = Creator
-        self.comments = Comments
         self.eiComplexity = IntVar()
         self.eiComplexity.set(External_Input_Complexity)
         self.eoComplexity = IntVar()
@@ -237,35 +232,55 @@ class FunctionPoint:
     def computeFP(self):
         def calculation():
             self.inputTotal = 0
-            if int(self.eiEntry.get()) < 0:
+            if self.eiEntry.get() == '':
+                messagebox.showerror("Error", "Please Enter a number in External Input")
+                return
+            elif int(self.eiEntry.get()) < 0:
+                messagebox.showerror("Error", "Please Enter a non-negative number in External Input")
                 return
             else:
                 eiCalc = int(self.eiEntry.get()) * self.eiComplexity.get()
                 calculationLabel = Label(self.tab, text=str(eiCalc), width=10, relief="groove")
                 calculationLabel.grid(row=2, column=5, padx=10, pady=10)
                 self.inputTotal += eiCalc
-            if int(self.eoEntry.get()) < 0:
+            if self.eoEntry.get() == '':
+                messagebox.showerror("Error", "Please Enter a number in External Ouput")
+                return
+            elif int(self.eoEntry.get()) < 0:
+                messagebox.showerror("Error", "Please Enter a non-negative number in External Output")
                 return
             else:
                 eoCalc = int(self.eoEntry.get()) * self.eoComplexity.get()
                 calculationLabel = Label(self.tab, text=str(eoCalc), width=10, relief="groove")
                 calculationLabel.grid(row=3, column=5, padx=10, pady=10)
                 self.inputTotal += eoCalc
-            if int(self.eInqEntry.get()) < 0:
+            if self.eInqEntry.get() == '':
+                messagebox.showerror("Error", "Please Enter a number in External Inquiries")
+                return
+            elif int(self.eInqEntry.get()) < 0:
+                messagebox.showerror("Error", "Please Enter a non-negative number in External Inquiries")
                 return
             else:
                 eInqCalc = int(self.eInqEntry.get()) * self.eInqComplexity.get()
                 calculationLabel = Label(self.tab, text=str(eInqCalc), width=10, relief="groove")
                 calculationLabel.grid(row=4, column=5, padx=10, pady=10)
                 self.inputTotal += eInqCalc
-            if int(self.ilfEntry.get()) < 0:
+            if self.ilfEntry.get() == '':
+                messagebox.showerror("Error", "Please Enter a number in Internal Logical Files")
+                return
+            elif int(self.ilfEntry.get()) < 0:
+                messagebox.showerror("Error", "Please Enter a non-negative number in Internal Logical Files")
                 return
             else:
                 ilfCalc = int(self.ilfEntry.get()) * self.ilfComplexity.get()
                 calculationLabel = Label(self.tab, text=str(ilfCalc), width=10, relief="groove")
                 calculationLabel.grid(row=5, column=5, padx=10, pady=10)
                 self.inputTotal += ilfCalc
-            if int(self.eiEntry.get()) < 0:
+            if self.eifEntry.get() == '':
+                messagebox.showerror("Error", "Please Enter a number in External Interface Files")
+                return
+            elif int(self.eifEntry.get()) < 0:
+                messagebox.showerror("Error", "Please Enter a non-negative number in External Interface Files")
                 return
             else:
                 eifCalc = int(self.eifEntry.get()) * self.eifComplexity.get()
@@ -275,13 +290,13 @@ class FunctionPoint:
             outputLabel = Label(self.tab, text=str(self.inputTotal), width=10, relief="groove")
             outputLabel.grid(row=7, column=5, padx=10, pady=10)
             self.functionPointCalc = self.inputTotal * (0.65 + 0.01 * self.VAFtotal)
-            fpSum = Label(self.tab, text=str(self.functionPointCalc), width=10, relief="groove")
+            fpSum = Label(self.tab, text=f"{self.functionPointCalc:,.2f}", width=15, relief="groove")
             fpSum.grid(row=8, column=5, padx=10, pady=10)
 
         fpButton = Button(self.tab, text="Compute FP", command=calculation)
         fpButton.grid(row=8, column=0, padx=10, pady=10)
 
-        fpSum = Label(self.tab, text="     ", width=10, relief="groove")
+        fpSum = Label(self.tab, text="     ", width=15, relief="groove")
         fpSum.grid(row=8, column=5, padx=10, pady=10)
 
     def valueAdjustments(self):
@@ -303,7 +318,7 @@ class FunctionPoint:
 
         def calcCodeSize():
             self.codeSize = self.languageAverage * self.functionPointCalc
-            ccsSum = Label(self.tab, text=str(self.codeSize), width=10, relief="groove")
+            ccsSum = Label(self.tab, text=f"{self.codeSize:,.2f}", width=15, relief="groove")
             ccsSum.grid(row=10, column=5, padx=10, pady=10)
 
         ccsButton = Button(self.tab, text="Compute Code Size", command=calcCodeSize)
@@ -315,7 +330,7 @@ class FunctionPoint:
         currentLanguage = Label(self.tab, text=self.language, width=10, relief="groove")
         currentLanguage.grid(row=10, column=3, padx=10, pady=10)  
 
-        ccsSum = Label(self.tab, text="     ", width=10, relief="groove")
+        ccsSum = Label(self.tab, text="     ", width=15, relief="groove")
         ccsSum.grid(row=10, column=5, padx=10, pady=10)
 
     def changeLanguage(self):
@@ -336,6 +351,6 @@ class FunctionPoint:
         self.valueAdjustments()
         self.computeCodeSize()
         self.changeLanguage()
-        parent.add(self.tab, text=self.project_name)
+        parent.add(self.tab, text="Function Points")
         parent.pack(expand=1, fill="both")
     

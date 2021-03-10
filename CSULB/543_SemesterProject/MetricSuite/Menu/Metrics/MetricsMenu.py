@@ -2,9 +2,8 @@ from tkinter import *
 
 class MetricsMenu:
 
-    def donothing(self):
-        pass
-
     def __init__(self, parent):
         self.metricsmenu = Menu(parent.menubar, tearoff=0)
-        self.metricsmenu.add_command(label="Function Points", command=self.donothing)
+        self.submenu = Menu(parent.menubar)
+        self.submenu.add_command(label="Enter FP Data", command=parent.root.addNewFunctionPoint)
+        self.metricsmenu.add_cascade(label="Function Points", menu=self.submenu)

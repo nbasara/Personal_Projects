@@ -14,8 +14,8 @@ class Languages:
         "VisualBasic":50
     }
     def __init__(self):
-        self.value = "Java"
-        self.average = 55
+        self.value = "None"
+        self.average = 0
 
     def getLanguage(self):
         return self.value

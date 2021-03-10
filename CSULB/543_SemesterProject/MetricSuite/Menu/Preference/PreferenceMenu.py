@@ -7,17 +7,18 @@ class PreferenceMenu:
         LanguageSettings = Languages()
         LanguageSelector = Toplevel()
         language = StringVar()
-        language.set(LanguageSettings.getLanguage())
+        language.set(self.parent.root.languages.getLanguage())
 
         def done(language):
-            LanguageSettings.changeLanguage(str(language))
+            self.parent.root.languages.changeLanguage(str(language))
             LanguageSelector.destroy()
 
         prompt = Label(LanguageSelector, text="Select one language", padx=10).pack()
-        for name, avg in LanguageSettings.LanguageList.items():
+        for name, avg in self.parent.root.languages.LanguageList.items():
             Radiobutton(LanguageSelector, text=name, variable=language, value=name).pack(anchor=W)
         doneButton = Button(LanguageSelector, text="Done", command=lambda: done(language.get())).pack()
 
     def __init__(self, parent):
         self.preferencesmenu = Menu(parent.menubar, tearoff=0)
         self.preferencesmenu.add_command(label="Language", command=self.openLanguageMenu)
+        self.parent = parent
