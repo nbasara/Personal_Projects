@@ -103,6 +103,8 @@ class FileMenu:
             messagebox.showerror("Error", "There is currently a project open.")
             return
         f = askopenfile(mode='r', filetypes =[('Metric Suite Files', '*.ms')])
+        if f is None:
+            return
         jsonContents = f.read()
         f.close()
         contents = json.loads(jsonContents)
