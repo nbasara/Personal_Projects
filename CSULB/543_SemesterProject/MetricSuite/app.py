@@ -4,6 +4,7 @@ from Project import Project
 from Menu.MenuBar import MenuBar
 from FunctionPoint.FunctionPoint import FunctionPoint
 from Languages.Languages import Languages
+from UseCasePoint.UseCasePoint import UseCasePoint
 
 class program:
 
@@ -13,14 +14,16 @@ class program:
         self.project = None
         self.languages = Languages()
         self.tempFP = []
+        self.tempUC = []
 
     def startProgram(self):
-        self.root.geometry("1000x800")
+        self.root.geometry("950x1080")
         self.root.title("CECS 543 Metrics Suite")
         menubar = MenuBar(self)
         menubar.startBar()
         self.root.config(menu=menubar.menubar)
         self.startNewTab()
+
 
     def addNewProject(self, projectName, productName, creator, comments):
         if projectName:
@@ -61,6 +64,15 @@ class program:
                             Input_Total=fp["inputTotal"], Function_Point_Calculation=fp["functionPointCalc"])
         self.project.fpWindows.append(loadFP)
         loadFP.newFunctionPoint(self.tab)
+    
+    def addNewUseCasePoint(self):
+        uc = UseCasePoint()
+        if self.project:
+            self.project.ucWindows.append(uc)
+        else:
+            self.tempUC.append(uc)
+        uc.newUseCasePoint(self.tab)
+
 
     def startNewTab(self):
         self.tab = ttk.Notebook(self.root)

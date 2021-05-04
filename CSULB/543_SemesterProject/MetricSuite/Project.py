@@ -7,3 +7,4 @@ class Project:
         self.comment = Comments
         self.file = None
         self.fpWindows = []
+        self.ucWindows = []
