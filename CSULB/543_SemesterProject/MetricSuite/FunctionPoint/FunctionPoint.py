@@ -5,6 +5,26 @@ from Languages.Languages import Languages
 
 class FunctionPoint:
 
+    def save(self):
+        content = {
+            "language": self.language,
+            "languageAverage": self.languageAverage,
+            "VAF": self.VAF,
+            "eiComplexity": self.eiComplexity.get(),
+            "eoComplexity": self.eoComplexity.get(),
+            "eInqComplexity": self.eInqComplexity.get(),
+            "ilfComplexity": self.ilfComplexity.get(),
+            "eifComplexity": self.eifComplexity.get(),
+            "eiInput": self.eiInput,
+            "eoInput": self.eoInput,
+            "eInqInput": self.eInqInput,
+            "ilfInput": self.ilfInput,
+            "eifInput": self.eifInput,
+            "inputTotal": self.inputTotal,
+            "functionPointCalc": self.functionPointCalc
+        }
+        return content
+
     def valueAdjustmentsWindow(self):
 
         valueAdjustmentFactors = [
@@ -235,11 +255,15 @@ class FunctionPoint:
             if self.eiEntry.get() == '':
                 messagebox.showerror("Error", "Please Enter a number in External Input")
                 return
-            elif int(self.eiEntry.get()) < 0:
+            try:
+                self.eiInput = int(self.eiEntry.get())
+            except ValueError:
+                messagebox.showerror("Error", "Please Enter an integer not a string in External Input")
+                return 
+            if int(self.eiEntry.get()) < 0:
                 messagebox.showerror("Error", "Please Enter a non-negative number in External Input")
                 return
             else:
-                self.eiInput = self.eiEntry.get()
                 eiCalc = int(self.eiEntry.get()) * self.eiComplexity.get()
                 calculationLabel = Label(self.tab, text=str(eiCalc), width=10, relief="groove")
                 calculationLabel.grid(row=2, column=5, padx=10, pady=10)
@@ -247,11 +271,15 @@ class FunctionPoint:
             if self.eoEntry.get() == '':
                 messagebox.showerror("Error", "Please Enter a number in External Ouput")
                 return
-            elif int(self.eoEntry.get()) < 0:
+            try:
+                self.eoInput = int(self.eoEntry.get())
+            except ValueError:
+                messagebox.showerror("Error", "Please Enter an integer not a string in External Output")
+                return 
+            if int(self.eoEntry.get()) < 0:
                 messagebox.showerror("Error", "Please Enter a non-negative number in External Output")
                 return
             else:
-                self.eoInput = self.eoEntry.get()
                 eoCalc = int(self.eoEntry.get()) * self.eoComplexity.get()
                 calculationLabel = Label(self.tab, text=str(eoCalc), width=10, relief="groove")
                 calculationLabel.grid(row=3, column=5, padx=10, pady=10)
@@ -259,11 +287,15 @@ class FunctionPoint:
             if self.eInqEntry.get() == '':
                 messagebox.showerror("Error", "Please Enter a number in External Inquiries")
                 return
-            elif int(self.eInqEntry.get()) < 0:
+            try:
+                self.eInqInput = int(self.eInqEntry.get())
+            except ValueError:
+                messagebox.showerror("Error", "Please Enter an integer not a string in External Inquiries")
+                return
+            if int(self.eInqEntry.get()) < 0:
                 messagebox.showerror("Error", "Please Enter a non-negative number in External Inquiries")
                 return
             else:
-                self.eInqInput = self.eInqEntry.get()
                 eInqCalc = int(self.eInqEntry.get()) * self.eInqComplexity.get()
                 calculationLabel = Label(self.tab, text=str(eInqCalc), width=10, relief="groove")
                 calculationLabel.grid(row=4, column=5, padx=10, pady=10)
@@ -271,11 +303,15 @@ class FunctionPoint:
             if self.ilfEntry.get() == '':
                 messagebox.showerror("Error", "Please Enter a number in Internal Logical Files")
                 return
-            elif int(self.ilfEntry.get()) < 0:
+            try:
+                self.ilfInput = int(self.ilfEntry.get())
+            except ValueError:
+                messagebox.showerror("Error", "Please Enter an integer not a string in Internal Logical Files")
+                return
+            if int(self.ilfEntry.get()) < 0:
                 messagebox.showerror("Error", "Please Enter a non-negative number in Internal Logical Files")
                 return
             else:
-                self.ilfInput = self.ilfEntry.get()
                 ilfCalc = int(self.ilfEntry.get()) * self.ilfComplexity.get()
                 calculationLabel = Label(self.tab, text=str(ilfCalc), width=10, relief="groove")
                 calculationLabel.grid(row=5, column=5, padx=10, pady=10)
@@ -283,11 +319,15 @@ class FunctionPoint:
             if self.eifEntry.get() == '':
                 messagebox.showerror("Error", "Please Enter a number in External Interface Files")
                 return
-            elif int(self.eifEntry.get()) < 0:
+            try:
+                self.eifInput = int(self.eifEntry.get())
+            except ValueError:
+                messagebox.showerror("Error", "Please Enter an integer not a string in External Interface Files")
+                return
+            if int(self.eifEntry.get()) < 0:
                 messagebox.showerror("Error", "Please Enter a non-negative number in External Interface Files")
                 return
             else:
-                self.eifInput = self.eifEntry.get()
                 eifCalc = int(self.eifEntry.get()) * self.eifComplexity.get()
                 calculationLabel = Label(self.tab, text=str(eifCalc), width=10, relief="groove")
                 calculationLabel.grid(row=6, column=5, padx=10, pady=10)

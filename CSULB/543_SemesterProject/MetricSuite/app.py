@@ -1,10 +1,12 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox 
 from Project import Project
 from Menu.MenuBar import MenuBar
 from FunctionPoint.FunctionPoint import FunctionPoint
 from Languages.Languages import Languages
 from UseCasePoint.UseCasePoint import UseCasePoint
+from SoftwareMaturityIndex.SoftwareMaturityIndex import SoftwareMaturityIndex
 
 class program:
 
@@ -13,15 +15,15 @@ class program:
         self.tab = None
         self.project = None
         self.languages = Languages()
-        self.tempFP = []
-        self.tempUC = []
+        self.tempSMIPanel = None
+        self.menubar = None
 
     def startProgram(self):
         self.root.geometry("950x1080")
         self.root.title("CECS 543 Metrics Suite")
-        menubar = MenuBar(self)
-        menubar.startBar()
-        self.root.config(menu=menubar.menubar)
+        self.menubar = MenuBar(self)
+        self.menubar.startBar()
+        self.root.config(menu=self.menubar.menubar)
         self.startNewTab()
 
 
@@ -42,8 +44,6 @@ class program:
                             Comments=comments
                             )
             self.root.title("CECS 543 Metrics Suite - " + "untitled")
-        if len(self.tempFP) >= 1:
-            self.projcet.fpWindows = self.tempFP
     
     def addNewFunctionPoint(self):
         fp = FunctionPoint(Language=self.languages.getLanguage(), 
@@ -51,7 +51,8 @@ class program:
         if self.project:
             self.project.fpWindows.append(fp)
         else:
-            self.tempFP.append(fp)
+            messagebox.showerror("Error", "Please open a project before opening a metric")
+            return
         fp.newFunctionPoint(self.tab)
 
     def loadFunctionPoint(self, fp):
@@ -70,9 +71,43 @@ class program:
         if self.project:
             self.project.ucWindows.append(uc)
         else:
-            self.tempUC.append(uc)
+            messagebox.showerror("Error", "Please open a project before opening a metric")
+            return
         uc.newUseCasePoint(self.tab)
 
+    def loadUseCasePoint(self, ucp):
+        loadUCP = UseCasePoint(Technical_Complexity_Factors=ucp["TCF"], Environmental_Complexity_Factors=ucp["ECF"],
+            UUCW_Simple_Input=ucp["uucwSimpleInput"], UUCW_Average_Input=ucp[ "uucwAverageInput"], 
+            UUCW_Complex_Input=ucp["uucwComplexInput"],  UAW_Simple_Input=ucp["uawSimpleInput"], 
+            UAW_Average_Input=ucp["uawAverageInput"], UAW_Complex_Input=ucp["uawComplexInput"],
+            Productivity_Factor_Input=ucp["productivityFactorEntry"], LOC_Per_PM_Input=ucp["locPerPMEntry"], 
+            LOC_Per_UCP_Input=ucp["locPerUCPEntry"], Use_Case_Point_Calc=ucp["useCasePointCalc"], Estimated_Hours_Calc=ucp["estimatedHoursCalc"],
+            Estimated_LOC_Calc=ucp["estimatedLOCCalc"], Estimated_PM_Calc=ucp["estimatedPMCalc"])
+        self.project.ucWindows.append(loadUCP)
+        loadUCP.newUseCasePoint(self.tab)
+    
+    def addNewSoftwareMaturityIndex(self):
+        smi = SoftwareMaturityIndex()
+        if self.project:
+            if self.project.smiPanel == None:
+                self.project.smiPanel = smi
+            else:
+                messagebox.showerror("Error", "There is already a Software Maturity Panel for this Project")
+                return
+        else:
+            messagebox.showerror("Error", "Please open a project before opening a metric")
+            return
+        smi.newSoftwareMaturityIndex(self.tab)
+    
+    def loadSoftwareMaturityIndex(self, smi):
+        if smi[len(smi)-1][4] != 0:
+            loadSMI = SoftwareMaturityIndex(Total=smi[len(smi)-1][4], Entries=smi)
+        else:
+            loadSMI = SoftwareMaturityIndex(Entries=smi)
+        self.project.smiPanel = loadSMI
+        loadSMI.newSoftwareMaturityIndex(self.tab)
+        loadSMI.displayEntries()
+        
 
     def startNewTab(self):
         self.tab = ttk.Notebook(self.root)
@@ -80,11 +115,24 @@ class program:
     
     def getTab(self):
         return self.tab
+    
+    def saveChanges(self):
+        response =  messagebox.askyesnocancel("Save/DiscardChanges", "Do you wish to save changes?")
+        if response:
+            self.menubar.fm.projectSave()
+            self.root.destroy()
+        elif response == None:
+            return
+        else:
+            self.root.destroy()
+
+            
 
 def main():
     
     origin = program()
     origin.startProgram()
+    origin.root.protocol("WM_DELETE_WINDOW", origin.saveChanges)
     origin.root.mainloop()
 
 

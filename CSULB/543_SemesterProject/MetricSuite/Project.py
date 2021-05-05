@@ -8,3 +8,4 @@ class Project:
         self.file = None
         self.fpWindows = []
         self.ucWindows = []
+        self.smiPanel = None

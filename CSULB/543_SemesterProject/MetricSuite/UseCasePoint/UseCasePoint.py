@@ -4,6 +4,27 @@ from tkinter import messagebox
 
 class UseCasePoint:
 
+    def save(self):
+        content = {
+            "TCF": self.TCF,
+            "ECF": self.ECF,
+            "uucwSimpleInput": self.uucwSimpleEntry.get(),
+            "uucwAverageInput": self.uucwAverageEntry.get(), 
+            "uucwComplexInput": self.uucwComplexEntry.get(),
+            "uawSimpleInput": self.uawSimpleEntry.get(),
+            "uawAverageInput": self.uawAverageEntry.get(),
+            "uawComplexInput": self.uawComplexEntry.get(),
+            "productivityFactorEntry": self.productivityFactorEntry.get(),
+            "locPerPMEntry": self.locPerPMEntry.get(),
+            "locPerUCPEntry": self.locPerUCPEntry.get(),
+            "useCasePointCalc": self.useCasePointCalc,
+            "estimatedHoursCalc": self.estimatedHoursCalc,
+            "estimatedLOCCalc": self.estimatedLOCCalc,
+            "estimatedPMCalc": self.estimatedPMCalc
+        }
+        return content
+
+
     def technicalComplexityFactorsWindow(self):
         Descriptions = ["Distributed System", "Performance", "End User Efficiency",
                 "Complex Internal Processing", "Resusability", "Easy to Install",
@@ -30,7 +51,7 @@ class UseCasePoint:
             weightsLabel = Label(window, text=str(Weights[i]))
             weightsLabel.grid(row=i+1, column=1)
             variable = IntVar()
-            variable.set(self.TCF[i]/Weights[i])
+            variable.set(int(self.TCF[i]/Weights[i]))
             variables.append(variable)
             dropDown = OptionMenu(window, variable, 0, 1, 2, 3, 4, 5)
             dropDown.grid(row=i+1, column=2)
@@ -66,7 +87,7 @@ class UseCasePoint:
             weightsLabel = Label(window, text=str(Weights[i]))
             weightsLabel.grid(row=i+1, column=1)
             variable = IntVar()
-            variable.set(self.ECF[i]/Weights[i])
+            variable.set(int(self.ECF[i]/Weights[i]))
             variables.append(variable)
             dropDown = OptionMenu(window, variable, 0, 1, 2, 3, 4, 5)
             dropDown.grid(row=i+1, column=2)
@@ -96,14 +117,14 @@ class UseCasePoint:
         self.uucwAverageEntry = None
         self.uucwComplexInput = UUCW_Complex_Input
         self.uucwComplexEntry = None
-        self.uucwTotal = self.uucwSimpleInput*5 + self. uucwAverageInput*10 + self.uucwComplexInput*15
+        self.uucwTotal = int(self.uucwSimpleInput)*5 + int(self.uucwAverageInput)*10 + int(self.uucwComplexInput)*15
         self.uawSimpleInput = UAW_Simple_Input
         self.uawSimpleEntry = None
         self.uawAverageInput = UAW_Average_Input
         self.uawAverageEntry = None
         self.uawComplexInput = UAW_Complex_Input
         self.uawComplexEntry = None
-        self.uawTotal = self.uawSimpleInput*5 + self. uawAverageInput*10 + self.uawComplexInput*15
+        self.uawTotal = int(self.uawSimpleInput)*5 + int(self.uawAverageInput)*10 + int(self.uawComplexInput)*15
         self.uucpTotal = self.uawTotal + self.uucwTotal
         self.productivityFactorInput = Productivity_Factor_Input
         self.productivityFactorEntry = None
@@ -296,14 +317,47 @@ class UseCasePoint:
             ucpTotal = Label(self.tab, text=f"{self.useCasePointCalc:,.2f}", width=15, relief="groove")
             ucpTotal.grid(row=17, column=3, padx=10, pady=10)
 
+            if self.productivityFactorEntry.get() == '':
+                messagebox.showerror("Error", "Please Enter a number in Productivity Factor")
+                return
+            try:
+                self.productivityFactorInput = int(self.productivityFactorEntry.get())
+            except ValueError:
+                messagebox.showerror("Error", "Please Enter an integer not a string in Productivity Factir")
+                return   
+            if int(self.productivityFactorEntry.get()) < 0:
+                messagebox.showerror("Error", "Please Enter a non-negative number in Productivity Factor")
+                return
             self.estimatedHoursCalc = self.useCasePointCalc * int(self.productivityFactorEntry.get())
             estimatedHoursTotal = Label(self.tab, text=f"{self.estimatedHoursCalc:,.2f}", width=15, relief="groove")
             estimatedHoursTotal.grid(row=18, column=3, padx=10, pady=10)
 
-            self.estimatedLOCCalc = self.useCasePointCalc * int( self.locPerUCPEntry.get())
+            if self.locPerUCPEntry.get() == '':
+                messagebox.showerror("Error", "Please Enter a number in LOCperUCP")
+                return
+            try:
+                self.locPerUCPInput = int(self.locPerUCPEntry.get())
+            except ValueError:
+                messagebox.showerror("Error", "Please Enter an integer not a string in LOCperUCP")
+                return   
+            if int(self.locPerUCPEntry.get()) < 0:
+                messagebox.showerror("Error", "Please Enter a non-negative number in LOCperUCP")
+                return
+            self.estimatedLOCCalc = self.useCasePointCalc * int(self.locPerUCPEntry.get())
             estimatedLOCTotal = Label(self.tab, text=f"{self.estimatedLOCCalc:,.2f}", width=15, relief="groove")
             estimatedLOCTotal.grid(row=19, column=3, padx=10, pady=10)
 
+            if self.locPerPMEntry.get() == '':
+                messagebox.showerror("Error", "Please Enter a number in LOCperPM")
+                return
+            try:
+                self.locPerPMInput = int( self.locPerPMEntry.get())
+            except ValueError:
+                messagebox.showerror("Error", "Please Enter an integer not a string in LOCperPM")
+                return   
+            if int(self.locPerPMEntry.get()) < 0:
+                messagebox.showerror("Error", "Please Enter a non-negative number in LOCperPM")
+                return
             self.estimatedPMCalc = self.estimatedLOCCalc / int(self.locPerPMEntry.get())
             estimatedPMTotal = Label(self.tab, text=f"{self.estimatedPMCalc:,.2f}", width=15, relief="groove")
             estimatedPMTotal.grid(row=20, column=3, padx=10, pady=10)
@@ -347,24 +401,94 @@ class UseCasePoint:
         ecfSum.grid(row=2, column=3, padx=10, pady=10)
 
     def computeUUCW(self):
+        if self.uucwSimpleEntry.get() == '':
+            messagebox.showerror("Error", "Please Enter a number in UUCW Simple")
+            return
+        try:
+            self.uucwSimpleInput = int(self.uucwSimpleEntry.get())
+        except ValueError:
+            messagebox.showerror("Error", "Please Enter an integer not a string in UUCW Simple")
+            return   
+        if int(self.uucwSimpleEntry.get()) < 0:
+            messagebox.showerror("Error", "Please Enter a non-negative number in UUCW Simple")
+            return
         calculationLabel = Label(self.tab, text=str((int(self.uucwSimpleEntry.get()) * 5)), width=10, relief="groove")
         calculationLabel.grid(row=5, column=3, padx=10, pady=10)
 
+        if self.uucwAverageEntry.get() == '':
+            messagebox.showerror("Error", "Please Enter a number in UUCW Average")
+            return
+        try:
+            self.uucwAverageInput = int(self.uucwAverageEntry.get())
+        except ValueError:
+            messagebox.showerror("Error", "Please Enter an integer not a string in UUCW Average")
+            return  
+        if int(self.uucwAverageEntry.get()) < 0:
+            messagebox.showerror("Error", "Please Enter a non-negative number in UUCW Average")
+            return
+        
         calculationLabel = Label(self.tab, text=str((int(self.uucwAverageEntry.get()) * 10)), width=10, relief="groove")
         calculationLabel.grid(row=6, column=3, padx=10, pady=10)
 
+        if self.uucwComplexEntry.get() == '':
+            messagebox.showerror("Error", "Please Enter a number in UUCW Complex")
+            return
+        try:
+            self.uucwComplexInput = int(self.uucwComplexEntry.get())
+        except ValueError:
+            messagebox.showerror("Error", "Please Enter an integer not a string in UUCW Complex")
+            return 
+        if int(self.uucwComplexEntry.get()) < 0:
+            messagebox.showerror("Error", "Please Enter a non-negative number in UUCW Complex")
+            return
         calculationLabel = Label(self.tab, text=str((int(self.uucwComplexEntry.get()) * 15)), width=10, relief="groove")
         calculationLabel.grid(row=7, column=3, padx=10, pady=10)
 
         self.uucwTotal = int(self.uucwSimpleEntry.get())*5 + int(self.uucwAverageEntry.get())*10 + int(self.uucwComplexEntry.get())*15
     
     def computeUAW(self):
+        if self.uawSimpleEntry.get() == '':
+            messagebox.showerror("Error", "Please Enter a number in UAW Simple")
+            return
+        try:
+            self.uawSimpleInput = int(self.uawSimpleEntry.get())
+        except ValueError:
+            messagebox.showerror("Error", "Please Enter an integer not a string in UAW Simple")
+            return 
+        if int(self.uawSimpleEntry.get()) < 0:
+            messagebox.showerror("Error", "Please Enter a non-negative number in UAW Simple")
+            return
+        self.uawSimpleInput = self.uawSimpleEntry.get()
         calculationLabel = Label(self.tab, text=str((int(self.uawSimpleEntry.get()) * 5)), width=10, relief="groove")
         calculationLabel.grid(row=10, column=3, padx=10, pady=10)
 
+        if self.uawAverageEntry.get() == '':
+            messagebox.showerror("Error", "Please Enter a number in UAW Average")
+            return
+        try:
+            self.uawAverageInput = int(self.uawAverageEntry.get())
+        except ValueError:
+            messagebox.showerror("Error", "Please Enter an integer not a string in UAW Average")
+            return  
+        if int(self.uawAverageEntry.get()) < 0:
+            messagebox.showerror("Error", "Please Enter a non-negative number in UAW Average")
+            return
+        self.uawAverageInput = self.uawAverageEntry.get()
         calculationLabel = Label(self.tab, text=str((int(self.uawAverageEntry.get()) * 10)), width=10, relief="groove")
         calculationLabel.grid(row=11, column=3, padx=10, pady=10)
 
+        if self.uawComplexEntry.get() == '':
+            messagebox.showerror("Error", "Please Enter a number in UAW Complex")
+            return
+        try:
+            self.uawComplexInput = int(self.uawComplexEntry.get())
+        except ValueError:
+            messagebox.showerror("Error", "Please Enter an integer not a string in UAW Complex")
+            return
+        if int(self.uawComplexEntry.get()) < 0:
+            messagebox.showerror("Error", "Please Enter a non-negative number in UAW Complex")
+            return
+        self.uawComplexInput = self.uawComplexEntry.get()
         calculationLabel = Label(self.tab, text=str((int(self.uawComplexEntry.get()) * 15)), width=10, relief="groove")
         calculationLabel.grid(row=12, column=3, padx=10, pady=10)
 

@@ -54,26 +54,6 @@ class FileMenu:
         cancelButton = Button(newProjectWindow, text="Cancel", command=newProjectWindow.destroy)
         cancelButton.grid(row=6, column=1, padx=5, pady=5)
 
-    def functionPointJson(self, fpWindow):
-        content = {
-            "language": fpWindow.language,
-            "languageAverage": fpWindow.languageAverage,
-            "VAF": fpWindow.VAF,
-            "eiComplexity": fpWindow.eiComplexity.get(),
-            "eoComplexity": fpWindow.eoComplexity.get(),
-            "eInqComplexity": fpWindow.eInqComplexity.get(),
-            "ilfComplexity": fpWindow.ilfComplexity.get(),
-            "eifComplexity": fpWindow.eifComplexity.get(),
-            "eiInput": fpWindow.eiInput,
-            "eoInput": fpWindow.eoInput,
-            "eInqInput": fpWindow.eInqInput,
-            "ilfInput": fpWindow.ilfInput,
-            "eifInput": fpWindow.eifInput,
-            "inputTotal": fpWindow.inputTotal,
-            "functionPointCalc": fpWindow.functionPointCalc
-        }
-        return content
-
     def projectSave(self):
         #are we working on a project?
         if self.root.project == None:
@@ -88,11 +68,17 @@ class FileMenu:
             "productName" : self.root.project.productName,
             "creator": self.root.project.creator,
             "comment": self.root.project.comment,
-            "fpWindows": []
+            "fpWindows": [],
+            "ucWindows": [],
+            "smiPanel": []
         }
         for fpWindow in self.root.project.fpWindows:
-            windowContent = self.functionPointJson(fpWindow)
+            windowContent = fpWindow.save()
             contents["fpWindows"].append(windowContent)
+        for ucWindow in self.root.project.ucWindows:
+            windowContent = ucWindow.save()
+            contents["ucWindows"].append(windowContent)
+        contents["smiPanel"] = self.root.project.smiPanel.entries
         jsonContents = json.dumps(contents)
 
         f.write(jsonContents)
@@ -112,6 +98,10 @@ class FileMenu:
                                     contents["creator"], contents["comment"])
         for fpWindow in contents["fpWindows"]:
             self.root.loadFunctionPoint(fpWindow)
+        for ucWindow in contents["ucWindows"]:
+            self.root.loadUseCasePoint(ucWindow)
+        self.root.loadSoftwareMaturityIndex(contents["smiPanel"])
+        
 
     def donothing(self):
         pass

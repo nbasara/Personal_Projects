@@ -10,6 +10,7 @@ class MenuBar:
     def __init__(self, parent):
         self.menubar = Menu(parent.root)
         self.root = parent
+        self.fm = None
     
     def startBar(self):
         self.addFileMenu()
@@ -19,8 +20,8 @@ class MenuBar:
         self.addHelpMenu()
 
     def addFileMenu(self):
-        fm = FileMenu(self)
-        self.menubar.add_cascade(label="File", menu=fm.filemenu)
+        self.fm = FileMenu(self)
+        self.menubar.add_cascade(label="File", menu=self.fm.filemenu)
     
     def addEditMenu(self):
         em =  EditMenu(self)
