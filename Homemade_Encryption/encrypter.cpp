@@ -76,18 +76,18 @@ bool isPrime(int num){
 int generatePrime(){
 	int n;
 
-	//generate number  from 1,000,000 to 1,000,000,000
-	n = rand() % 1000000 + 100000;
+	//generate number  from 100,000 to 10,000
+	n = rand() % 100000 + 10000;
 
 	//check if a prime number
 	while(!isPrime(n)){
-		n = rand() % 1000000000 + 1000000;
+		n = rand() % 100000 + 10000;
 	}
 	return n;
 }
 
 int main() {
-	std::string file_name;
+	//std::string file_name;
 
 	//set random seed
 	srand(time(NULL));
