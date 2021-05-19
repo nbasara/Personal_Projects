@@ -1,75 +1,102 @@
 #include <iostream>
 #include <string>
 #include <stdlib.h>
-#include <random>
+#include <time.h>
 #include <cmath>
 
-bool isPrime(double n){
+//calulating (base^exp) % mod
+int power(unsigned long long int base, unsigned long long int exp, unsigned long long int mod){
+	//initial result
+	unsigned long long int res = 1;
+	base = base % mod;
+
+	while(exp > 0){
+		//if y is odd, mult x with result
+		if(exp & 1){
+			res = (res*base) % mod;
+		}
+		//y is even....y = y/2
+		exp = exp>>1;
+		base = (base*base) % mod;
+	}
+	return res; 
+}
+
+bool millerTest(unsigned long long int n, unsigned long long int d, int max){
+	//pick a random intger from a in range [2, n -2]
+	unsigned long long int a = rand() % (n - 2) + 2;
+	unsigned long long int x = power(a, d, n);
+	if(x == 1 || x == (n - 1)){
+		//prime
+		return false;		
+	}
+	for(int i = 0; i < max; i ++){
+		x = (x*x) % n;
+		d *= 2;
+		if(x == n - 1){
+			//prime
+			return false;
+		}
+		if(x == 1){
+			//composite
+			return true;
+		}
+	}
+	//composite
+	return true;
+
+}
+
+bool isPrime(unsigned long long int num){
 	//don't need to handle base case less then three
 	//check if even
 	//Miller-Rabin Primality Test
-	if(fmod(n, 2) == 0){
-		return false;
-	}
 	
 	//write n as 2^r*d + 1 with d odd
-	double d = n - 1;
-	while(fmod(d, 2) == 0) {
-		d = floor(d / 2);
+	unsigned long long int d = num - 1;
+	unsigned long long int max_divisions = 0;
+	while(d % 2 == 0) {
+		d = d / 2;
+		max_divisions++; 
 	}
 	//Witnessloop k times
-	std::random_device rd;
-	std::mt19937 mt(rd());
-	std::uniform_real_distribution<double> dist(2, n - 1);
 	for(int i = 0; i < 128; i++){
-		double a = dist(mt);
-		double x = fmod(pow(a, d), n);
-		if(x != 1 and x!= n - 1){
-			while(d != n - 1 and x != n - 1){
-				x = fmod((x * x), n);
-				d *= 2;
-				if(x == 1){
-					return false;
-				}
-			}
-			if(x != n - 1){
-				return false;
-			}
+		if(millerTest(num, d, max_divisions)){
+			//not prime
+			return false;
 		}
 	}
 	//prime
 	return true;
 }
 
-int generateNBitNum(unsigned int n){
+unsigned long long int generateNBitNum(int n){
 	if (n > 64){
 		n = 64;
 	}
-
-	std::default_random_engine generator;
-	std::uniform_real_distribution<double> dist(std::pow(2, (n-1)) + 1, std::pow(2, n));
-
-
 	//generate number from 2**(n-1) + 1
-	double num = 4;
+	unsigned long long int num =  rand() % (((unsigned long long int) std::pow(2, n)) - 1) + (((unsigned long long int) std::pow(2, (n-1))) + 1);
 	while(!isPrime(num)){
-		num = dist(generator);
-		std::cout << num << std::endl;
+		num = rand() % (((unsigned long long int) std::pow(2, n)) - 1) + (((unsigned long long int) std::pow(2, (n-1))) + 1);
 	}
-		return num;
+	return num;
 }
 
 
 int main() {
 	//std::string file_name;
+
+	//set random seed
+	srand(time(NULL));
 	
 	//get file name from the user 
 	//std::cout << "Please enter the file which you would like to encrypt: "; 
 	//std::cin >> file_name;155708393user@user-VirtualBox
 	//generate two random prime numbers
-	std::cout.precision(32);
-	double prime1 = generateNBitNum(64);
+	unsigned long long int prime1 = generateNBitNum(32);
 	std::cout << prime1 << std::endl;
+	unsigned long long int prime2 = generateNBitNum(32);
+	std::cout << prime2 << std::endl;
 	
 
 	return 0;
