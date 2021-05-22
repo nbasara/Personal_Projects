@@ -4,6 +4,19 @@
 #include <time.h>
 #include <cmath>
 
+//calculate the greatest common divisor of two nunbers
+unsigned long long int gcd(unsigned long long int a, unsigned long long int b){
+	unsigned long long int temp;
+	while(true){
+		temp = a % b;
+		if(temp == 0){
+			return b;
+		}
+		a = b;
+		b = temp;
+	}
+}
+
 //calulating (base^exp) % mod
 int power(unsigned long long int base, unsigned long long int exp, unsigned long long int mod){
 	//initial result
@@ -47,6 +60,15 @@ bool millerTest(unsigned long long int n, unsigned long long int d, int max){
 
 }
 
+//tells if the gcd of two numbers is 1
+bool isCoprime(unsigned long long int a, unsigned long long int b){
+	if(gcd(a, b) == 1){
+		return true;
+	} else {
+		return false;
+	}
+}
+
 bool isPrime(unsigned long long int num){
 	//don't need to handle base case less then three
 	//check if even
@@ -82,10 +104,24 @@ unsigned long long int generateNBitNum(int n){
 	return num;
 }
 
+void RSA(unsigned long long int p, unsigned long long int q){
+	unsigned long long int n, totient, e, d;
+	n = p * q;
+	totient = (p - 1)*(q - 1);
+
+	e = rand() % (totient) + 1;
+
+	while(!isCoprime(e, totient)){
+		e = rand() % (totient) + 1;
+	}
+	d = (2 * totient + 1) / e;
+	//This is where the program reads the file to encrypt the message
+}
+
 
 int main() {
 	//std::string file_name;
-
+	unsigned long long int prime1, prime2; 	
 	//set random seed
 	srand(time(NULL));
 	
@@ -93,11 +129,11 @@ int main() {
 	//std::cout << "Please enter the file which you would like to encrypt: "; 
 	//std::cin >> file_name;155708393user@user-VirtualBox
 	//generate two random prime numbers
-	unsigned long long int prime1 = generateNBitNum(32);
+	prime1 = generateNBitNum(32);
 	std::cout << prime1 << std::endl;
-	unsigned long long int prime2 = generateNBitNum(32);
+	prime2 = generateNBitNum(32);
 	std::cout << prime2 << std::endl;
-	
+	RSA(prime1, prime2);
 
 	return 0;
 }
