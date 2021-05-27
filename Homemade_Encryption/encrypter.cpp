@@ -2,7 +2,7 @@
 #include <string>
 #include <stdlib.h>
 #include <time.h>
-#include <cmath>
+#include <math.h>
 #include <fstream>
 #include <vector>
 
@@ -10,7 +10,7 @@
 unsigned long long int gcd(unsigned long long int a, unsigned long long int b){
 	unsigned long long int temp;
 	while(true){
-		temp = a % b;
+		temp = fmod(a, b);
 		if(temp == 0){
 			return b;
 		}
@@ -19,8 +19,12 @@ unsigned long long int gcd(unsigned long long int a, unsigned long long int b){
 	}
 }
 
+unsigned long long int lcm(unsigned long long int a, unsigned long long int b){
+	return (a*b)/gcd(a, b);
+}
+
 //calulating (base^exp) % mod
-int power(unsigned long long int base, unsigned long long int exp, unsigned long long int mod){
+unsigned long long int power(unsigned long long int base, unsigned long long int exp, unsigned long long int mod){
 	//initial result
 	unsigned long long int res = 1;
 	base = base % mod;
@@ -71,6 +75,34 @@ bool isCoprime(unsigned long long int a, unsigned long long int b){
 	}
 }
 
+unsigned long long int modInverse(unsigned long long int a, unsigned long long int m){ 
+    unsigned long long int m0 = m;
+    unsigned long long int y = 0, x = 1;
+	if (m == 1)
+        return 0;
+ 
+    while (a > 1) {
+        // q is quotient
+        unsigned long long int q = a / m;
+        unsigned long long int t = m;
+ 
+        // m is remainder now, process same as
+        // Euclid's algo
+        m = a % m, a = t;
+        t = y;
+ 
+        // Update y and x
+        y = x - q * y;
+        x = t;
+    }
+ 
+    // Make x positive
+    if (x < 0)
+        x += m0;
+ 
+    return x;
+}
+
 bool isPrime(unsigned long long int num){
 	//don't need to handle base case less then three
 	//check if even
@@ -106,22 +138,22 @@ unsigned long long int generateNBitNum(int n){
 	return num;
 }
 
-void RSA_decryption(unsigned long long int d, unsigned long long int n, std::string target){
-	char m;
+void RSA_decryption(double d, double n, std::string target){
+	double i;
+	double m;
 	//open encrypted binary file
-	std::ifstream input(target, std::ios::binary);
+	std::fstream input(target,std::ios_base::in);
 
 	//unload the characters into the buffer
-	std::vector<unsigned long long int> buffer(std::istreambuf_iterator<char>(input), {});
 	//open file write 
 	std::ofstream out;
 	out.open("Decyrption.txt");
 	//iterate through the buffer
-	
-	for(unsigned long long int i : buffer){
-		i = pow(i, d);
-		i = fmod(i, n);
-		//std::cout << i;
+	std::cout << d << " " << n << std::endl;
+	while(input >> i){
+		std::cout << i << " ";
+		m = power(i, d, n);
+		std::cout << m << std::endl;
 	}
 
 	out.close();
@@ -130,57 +162,60 @@ void RSA_decryption(unsigned long long int d, unsigned long long int n, std::str
 }
 
 
-void RSA_encrypt(unsigned long long int p, unsigned long long int q, std::string file){
-	unsigned long long int n, totient, e, d, c, result;
+void RSA_encrypt(double p, double q, std::string file){
+	double n, e, d, c, totient, m;
 	n = p * q;
 	totient = (p - 1)*(q - 1);
+	std::cout << "This is my phi " << totient << std::endl;
+	e = 17;
 
-	e = rand() % (totient) + 1;
-
-	while(!isCoprime(e, totient)){
-		e = rand() % (totient) + 1;
+	while(e < totient){
+		double track = gcd(e, totient);
+		if(track == 1){
+			break;
+		} else {
+			e++;
+		}
 	}
-	d = (2 * totient + 1) / e;
+	std::cout << "This is my e " << e << std::endl;
+	d = modInverse(e, totient);
 	std::cout << "This the private key generated for keeps " << d << std::endl;
 	//This is where the program reads the file to encrypt the message
 	//open file to read the message
-	std::ifstream fd(file, std::ios::binary);
+	std::ifstream fd(file);
 	//File to write encrypted message
-	std::fstream out;
-	out.open("Encryption.bin", std::ios::out | std::ios::binary);
+	std::ofstream out;
+	out.open("Encryption.txt");
 	if(fd.is_open()){
 		//read each character of file and transform to int
 		std::vector<unsigned char> buffer(std::istreambuf_iterator<char>(fd), {});
 		for(unsigned char m : buffer){
-			c = (unsigned long long int) m;
-			std::cout << c << " " << e << " "; 
-			result = powl(c, e);
-			std::cout << result << std::endl;
-			c = fmod(c, n);
-			out.write(reinterpret_cast<const char *>(&c), sizeof(c));
+			c = (double) m;
+			c = power(c, e, n);
+			out << c << " ";
 		} 
 		out.close();
 		fd.close();
 	} else{
 		std::cerr << "ERROR, Was unable to open file: " << file << std::endl;
 	}
-	RSA_decryption(d, n, "Encryption.bin");
+	RSA_decryption(d, n, "Encryption.txt");
 
 }
 
 
 int main() {
-	std::string file_name;
+	std::string file_name = "Test.txt";
 	unsigned long long int prime1, prime2; 	
 	//set random seed
 	srand(time(NULL));
 	
 	//get file name from the user 
-	std::cout << "Please enter the file which you would like to encrypt: "; 
-	std::cin >> file_name;
+	//std::cout << "Please enter the file which you would like to encrypt: "; 
+	//std::cin >> file_name;
 	//generate two random prime numbers
-	prime1 = generateNBitNum(32);
-	prime2 = generateNBitNum(32);
+	prime1 = generateNBitNum(8);
+	prime2 = generateNBitNum(8);
 	//Run the RSA algorithm
 	RSA_encrypt(prime1, prime2, file_name);
 
