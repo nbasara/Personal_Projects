@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <cmath>
+#include <fstream>
+#include <vector>
 
 //calculate the greatest common divisor of two nunbers
 unsigned long long int gcd(unsigned long long int a, unsigned long long int b){
@@ -104,8 +106,32 @@ unsigned long long int generateNBitNum(int n){
 	return num;
 }
 
-void RSA(unsigned long long int p, unsigned long long int q){
-	unsigned long long int n, totient, e, d;
+void RSA_decryption(unsigned long long int d, unsigned long long int n, std::string target){
+	char m;
+	//open encrypted binary file
+	std::ifstream input(target, std::ios::binary);
+
+	//unload the characters into the buffer
+	std::vector<unsigned long long int> buffer(std::istreambuf_iterator<char>(input), {});
+	//open file write 
+	std::ofstream out;
+	out.open("Decyrption.txt");
+	//iterate through the buffer
+	
+	for(unsigned long long int i : buffer){
+		i = pow(i, d);
+		i = fmod(i, n);
+		//std::cout << i;
+	}
+
+	out.close();
+	input.close();
+
+}
+
+
+void RSA_encrypt(unsigned long long int p, unsigned long long int q, std::string file){
+	unsigned long long int n, totient, e, d, c, result;
 	n = p * q;
 	totient = (p - 1)*(q - 1);
 
@@ -115,25 +141,48 @@ void RSA(unsigned long long int p, unsigned long long int q){
 		e = rand() % (totient) + 1;
 	}
 	d = (2 * totient + 1) / e;
+	std::cout << "This the private key generated for keeps " << d << std::endl;
 	//This is where the program reads the file to encrypt the message
+	//open file to read the message
+	std::ifstream fd(file, std::ios::binary);
+	//File to write encrypted message
+	std::fstream out;
+	out.open("Encryption.bin", std::ios::out | std::ios::binary);
+	if(fd.is_open()){
+		//read each character of file and transform to int
+		std::vector<unsigned char> buffer(std::istreambuf_iterator<char>(fd), {});
+		for(unsigned char m : buffer){
+			c = (unsigned long long int) m;
+			std::cout << c << " " << e << " "; 
+			result = powl(c, e);
+			std::cout << result << std::endl;
+			c = fmod(c, n);
+			out.write(reinterpret_cast<const char *>(&c), sizeof(c));
+		} 
+		out.close();
+		fd.close();
+	} else{
+		std::cerr << "ERROR, Was unable to open file: " << file << std::endl;
+	}
+	RSA_decryption(d, n, "Encryption.bin");
+
 }
 
 
 int main() {
-	//std::string file_name;
+	std::string file_name;
 	unsigned long long int prime1, prime2; 	
 	//set random seed
 	srand(time(NULL));
 	
 	//get file name from the user 
-	//std::cout << "Please enter the file which you would like to encrypt: "; 
-	//std::cin >> file_name;155708393user@user-VirtualBox
+	std::cout << "Please enter the file which you would like to encrypt: "; 
+	std::cin >> file_name;
 	//generate two random prime numbers
 	prime1 = generateNBitNum(32);
-	std::cout << prime1 << std::endl;
 	prime2 = generateNBitNum(32);
-	std::cout << prime2 << std::endl;
-	RSA(prime1, prime2);
+	//Run the RSA algorithm
+	RSA_encrypt(prime1, prime2, file_name);
 
 	return 0;
 }
