@@ -7,18 +7,13 @@ Encrypt a file using RSA algorithm. Generate two random prime numbers between ~~
 *To do*
 - [X] Generate Two Random Prime Numbers (for small numbers)
 - [X] Verify primality (for small numbers)
-- [ ] Generate multiple threads to generate candidates and check if they are prime
-- [ ] Implement RSA
-- [ ] Open file to encrypt
-- [ ] Write Encrypted message
-- [ ] Give user keys
-- [ ] Decrypt files
+- [X] Implement RSA
+- [X] Open file to encrypt
+- [X] Write Encrypted message
+- [X] Give user keys
+- [X] Decrypt files
 
 **TBD**
-- What is a fast way to generate large prime numbers?
-- Am I writing over the file or generating a new one?
-- Seperate program to decrypt or create option menu?
-- Different options to shift the original bits?
 
 *Update*
 The initial algorithm of generating random int and testing if it was prime was **A** taking too long to generate a prime number and **B** not generating a guarenteed n-bit number.
@@ -26,3 +21,5 @@ The initial algorithm of generating random int and testing if it was prime was *
 I will instead be generating an n bit checking if divisible by any prime < 400 and then verifying against 20 iterations of the MillerRabin primality test.
 
 Slowly realized doing this single threaded will not result in progress.  Time to use multiple threads.
+
+There currently is something wrong with the math or implementation of the private key d.

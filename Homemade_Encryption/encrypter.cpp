@@ -41,6 +41,7 @@ unsigned long long int power(unsigned long long int base, unsigned long long int
 	return res; 
 }
 
+//test to check the primality of the number
 bool millerTest(unsigned long long int n, unsigned long long int d, int max){
 	//pick a random intger from a in range [2, n -2]
 	unsigned long long int a = rand() % (n - 2) + 2;
@@ -75,6 +76,7 @@ bool isCoprime(unsigned long long int a, unsigned long long int b){
 	}
 }
 
+//calculates d such that e*d = 1 mod totient
 unsigned long long int modInverse(unsigned long long int a, unsigned long long int m){ 
     unsigned long long int m0 = m;
     unsigned long long int y = 0, x = 1;
@@ -103,6 +105,7 @@ unsigned long long int modInverse(unsigned long long int a, unsigned long long i
     return x;
 }
 
+//function to tell when a number is prime
 bool isPrime(unsigned long long int num){
 	//don't need to handle base case less then three
 	//check if even
@@ -126,6 +129,10 @@ bool isPrime(unsigned long long int num){
 	return true;
 }
 
+//generates an n bit number
+//is capable of 64 bit numbers the limit of c++
+//function takes too long to return a value
+//generally 32 bit numbers are too large to work with
 unsigned long long int generateNBitNum(int n){
 	if (n > 64){
 		n = 64;
@@ -138,6 +145,7 @@ unsigned long long int generateNBitNum(int n){
 	return num;
 }
 
+//given a file it will decrypt the mesaage with private keys
 void RSA_decryption(double d, double n, std::string target){
 	double i;
 	double m;
@@ -161,7 +169,7 @@ void RSA_decryption(double d, double n, std::string target){
 
 }
 
-
+//given two prime numbers it will encrypt a text file
 void RSA_encrypt(double p, double q, std::string file){
 	double n, e, d, c, totient, m;
 	n = p * q;
@@ -214,8 +222,8 @@ int main() {
 	//std::cout << "Please enter the file which you would like to encrypt: "; 
 	//std::cin >> file_name;
 	//generate two random prime numbers
-	prime1 = generateNBitNum(8);
-	prime2 = generateNBitNum(8);
+	prime1 = generateNBitNum(6);
+	prime2 = generateNBitNum(6);
 	//Run the RSA algorithm
 	RSA_encrypt(prime1, prime2, file_name);
 
