@@ -218,6 +218,7 @@ int main() {
 	//set random seed
 	srand(time(NULL));
 	
+	std::cout << "This program does currently does not execute in bash" << std::endl;
 	//get file name from the user 
 	//std::cout << "Please enter the file which you would like to encrypt: "; 
 	//std::cin >> file_name;
