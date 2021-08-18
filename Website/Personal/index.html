@@ -1,15 +1,104 @@
 <!DOCTYPE html>
 <!--First day give me a break-->
-<html>
+<html lang ="en">
  	<head>
-    		<title>This is going to be fun</title>
+		<meta charset="UTF-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<title>Nathaniel Basara</title>
   	</head>
  	<body>
-		<h1>"Hello World!"</h1>
-    		<h2>A little about me</h2>
-	<div>
-		<p>Hello my name is Nathan and I am trying to learn HTML so I am curious to how this will show up in  chrome</p>
-	</div>
-    	<a href="https://github.com/nbasara" target="_blank"> This is my Github</a>   
+		 <!-- Uppper Navigation -->
+		<header>
+			<div class="logo">
+				<img src="img/headshot.png" alt="uhhhhhh">
+			</div>
+			<button class="nav-toggle" aria-label="toggle navigation">
+				<span class="hamburger"></span>
+			</button>
+			<nav class="nav">
+				<ul class="nav_list">
+					<li class="nav_item"><a href="#home" class="nav_link">Home</a></li>
+					<li class="nav_item"><a href="#experience" class="nav_link">My Experince</a></li>
+					<li class="nav_item"><a href="#about" class="nav_link">About Me</a></li>
+					<li class="nav_item"><a href="#projects" class="nav_link">Projects</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Introdcuction -->
+		<section class="Intro" id="home">
+			<h1 class="section_title section_title-intro">
+				Hello and welcome to my website. I am <strong>Nathaniel Basara</strong>
+			</h1>
+			<p class="section_subtitle section_subtitle-intro">TBD</p>
+			<img src="img/main_picture.jpg" alt="Supposed to be my face.">
+		</section>
+
+		<!-- Experience -->
+		<section class="my-experience" id="experience">
+			<h2 class="section_title section_title-experience">What I've Done</h2>
+			<h3 class="sub_section_title sub_section_title-graduate">Graduate</h3>
+			<div class="graduate experiences">
+				<div class="graduate experience">
+					<h4>Teaching Associate - Introduction to problem solving and programming</h4>
+					<p>Teaching two labs roughly 35 students each. Walking through the basics of python and 
+						problem solving as well as grading homework and tests.</p>
+				</div> <!-- /graduate experience-->
+				<div class="coures">
+					<h4>Coures</h4>
+					<p>Advance Topics in Programming Languages, Advanced Operating Systems, Advance Analysis of Algorthims, 
+						Advance Software Engineering,  Pattern Recognition, Blockchain</p>
+				</div> <!-- courses -->
+			</div> <!-- /graduate experiences -->
+			<h3 class="sub_section_title sub_section_title-undergrad">Undergrad</h3>
+			<div class="undergrad-experiences">
+				<div class="undergrad-experience">
+					<h4>SproutLabs "Internship"</h4>
+					<p>Was a developer and acting product owner among other interns.  I was the main line of communication 
+						between the client and rest of team setting up meetings and organizing tasks for developers. 
+						Designed and implemented the sign in page on iOS.</p>
+				</div> <!-- /undergrad experience-->
+				<div class="undergrad-experience">
+					<h4>RSNA Hemmorage Project</h4>
+					<p>Developed a model to classify DICOM brain scans into detecting and classifying different hemorrhages.</p>
+				</div> <!-- /undergrad experience-->
+				<div class="undergrad-experience">
+					<h4>Civar-10 Error Model</h4>
+					<p>Developed and trained a model to be tolerant of miss labeled images.</p>
+				</div> <!-- /undergrad experience-->
+				<div class="coures">
+					<h4>Coures</h4>
+					<p>Artificial Inteligence, Machine Learning, Introduction to Software Engineering, 
+						Principle of Computer System Design, Computer Architecture, Dynamic Systems, Modern Physics</p>
+				</div> <!-- courses -->
+			</div> <!-- /undergrad experiences -->
+		</section>
+
+		<!-- About Me -->
+		<section class="about-me" id="about">
+			<h2 class="section_title section_title-about">What about me?</h2>
+			<p class="section_subtitle section_subtitle-about"></p>
+			<div class="about-me_body">
+				<p></p>
+				<p></p>
+			</div>
+			<img src="" alt="Image of my ugly mug">
+		</section>
+
+		<!-- My Projects -->
+		<section class="my-projects" id="projects">
+			<!--Portfolio item 1-->
+			<a href="a" class="portfolio_item">
+				<img src="" alt="project description" class="portfolio_img">
+			</a>
+			<!--Portfolio item 1-->
+			<a href="a" class="portfolio_item">
+				<img src="" alt="project description" class="portfolio_img">
+			</a>
+			<!--Portfolio item 1-->
+			<a href="a" class="portfolio_item">
+				<img src="" alt="project description" class="portfolio_img">
+			</a>
+		</section>
   	</body>
 </html>
