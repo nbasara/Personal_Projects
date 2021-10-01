@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -11,7 +12,7 @@ int SharedValue = 0;
 /*** unAltered Code ***/
 
 //multi threaded function for thread arguement
-void * SimpleThread(int thread_num) {
+void SimpleThread(int thread_num) {
 	//individual to each thread
 	//gets assigned shared value 
 	int num, val;
@@ -36,6 +37,7 @@ void * SimpleThread(int thread_num) {
 int main(int argc, char* argv[]) {
 
 	//Verify arguements are withing range
+	printf("%s\n",argv[1]);
 
 	//Generate that many threads
 	//Send threads to SimpleThread
