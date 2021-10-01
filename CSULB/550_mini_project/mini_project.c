@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <ctype.h>
 #include <unistd.h>
 #include <pthread.h>
 
@@ -35,9 +36,27 @@ void SimpleThread(int thread_num) {
 /*** main thread ***/
 
 int main(int argc, char* argv[]) {
+	int i, threadsToMake;
+
+	//verify the user has given number of arguements required to run
+	if(argc != 2) {
+		printf("Please provide a number of threads to create.\n");
+		return 0;
+	}
 
 	//Verify arguements are withing range
-	printf("%s\n",argv[1]);
+	int arguementLength = strlen(argv[1]);
+	for(i = 0; i <arguementLength; i++) {
+		if(!isdigit(argv[1][i])) {
+			printf("Arguement is not a number.\n");
+			return 0;
+		}
+	}
+
+	threadsToMake = atoi(argv[1]);
+
+	printf("This is the number of threads you requested.  %d\n", threadsToMake);
+
 
 	//Generate that many threads
 	//Send threads to SimpleThread

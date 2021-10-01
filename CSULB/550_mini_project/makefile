@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-g3
-LDFLAGS=-pthread
+LDFLAGS=-pthread -Wall -Wextra -Wpedantic -Wshadow
 
 .PHONY: clean all
 
