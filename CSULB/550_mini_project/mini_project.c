@@ -10,13 +10,15 @@
 int SharedValue = 0;
 
 
-/*** unAltered Code ***/
+/*** unaltered Code ***/
 
 //multi threaded function for thread arguement
-void SimpleThread(int thread_num) {
+void * SimpleThread(void * which) {
 	//individual to each thread
 	//gets assigned shared value 
 	int num, val;
+
+	int thread_num = *(int *) which;
 
 	for(num = 0; num < 20; num++) {
 
@@ -52,14 +54,31 @@ int main(int argc, char* argv[]) {
 			return 0;
 		}
 	}
-
+	//convert arguement to integer
 	threadsToMake = atoi(argv[1]);
 
-	printf("This is the number of threads you requested.  %d\n", threadsToMake);
+	//Making an array of pthreads
+	pthread_t thread_array[threadsToMake];
+	//makingan array of thread_nums to pass to function
+	int thread_nums[threadsToMake];
 
+	for(i = 0; i < threadsToMake; i++){
 
-	//Generate that many threads
-	//Send threads to SimpleThread
+		printf("Making thread %d\n", i);
+		//store the thread numbers
+		thread_nums[i] = i;
+
+		//Generate that many threads
+		//Send threads to SimpleThread
+		pthread_create(&thread_array[i], NULL, SimpleThread, (void *) &thread_nums[i]);
+	}
+
+	//join all threads
+	for(i = 0; i < threadsToMake; i++){
+		pthread_join(thread_array[i], NULL);
+	}
+
+	printf("Done\n");
 
 	return 0;
 }
