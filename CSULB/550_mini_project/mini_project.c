@@ -9,10 +9,17 @@
 //shared variable
 int SharedValue = 0;
 
+//mutex lock
+pthread_mutex_t lock;
+
+//barrier
+pthread_barrier_t barrier;
+
 
 /*** unaltered Code ***/
 
 //multi threaded function for thread arguement
+/*
 void * SimpleThread(void * which) {
 	//individual to each thread
 	//gets assigned shared value 
@@ -34,11 +41,39 @@ void * SimpleThread(void * which) {
 	val = SharedValue;
 	printf("Thread %d sees value %d\n", thread_num, val);
 }
+*/
+
+
+/*** alterered code ***/
+
+void * SimpleThread(void * which) {
+	int num, val;
+	int thread_num = *(int *) which;
+
+
+	for(num = 0; num < 20; num++) {
+
+		pthread_mutex_lock(&lock);
+		val = SharedValue;
+
+		printf("*** thread %d sees value %d\n", thread_num, val);
+		SharedValue = val + 1;
+		pthread_mutex_unlock(&lock);
+	}
+	//barrier here
+	pthread_barrier_wait(&barrier);
+
+	val = SharedValue;
+	printf("Thread %d sees value %d\n", thread_num, val);
+
+
+}
 
 /*** main thread ***/
 
+//given two arguements program_name, threads to make
 int main(int argc, char* argv[]) {
-	int i, threadsToMake;
+	int i, threadsToMake, error;
 
 	//verify the user has given number of arguements required to run
 	if(argc != 2) {
@@ -46,7 +81,7 @@ int main(int argc, char* argv[]) {
 		return 0;
 	}
 
-	//Verify arguements are withing range
+	//Verify arguements are within range - integer
 	int arguementLength = strlen(argv[1]);
 	for(i = 0; i <arguementLength; i++) {
 		if(!isdigit(argv[1][i])) {
@@ -61,24 +96,26 @@ int main(int argc, char* argv[]) {
 	pthread_t thread_array[threadsToMake];
 	//makingan array of thread_nums to pass to function
 	int thread_nums[threadsToMake];
+	//initialize barrier to the number of threads for program
+	pthread_barrier_init(&barrier, NULL, threadsToMake);
 
 	for(i = 0; i < threadsToMake; i++){
-
-		printf("Making thread %d\n", i);
 		//store the thread numbers
 		thread_nums[i] = i;
 
 		//Generate that many threads
 		//Send threads to SimpleThread
-		pthread_create(&thread_array[i], NULL, SimpleThread, (void *) &thread_nums[i]);
+		error = pthread_create(&thread_array[i], NULL, SimpleThread, (void *) &thread_nums[i]);
+		if(error != 0){
+			printf("Problem creating thread %d", i);
+			return 0;
+		}
 	}
 
 	//join all threads
 	for(i = 0; i < threadsToMake; i++){
 		pthread_join(thread_array[i], NULL);
 	}
-
-	printf("Done\n");
 
 	return 0;
 }
