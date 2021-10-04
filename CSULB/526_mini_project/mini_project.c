@@ -45,7 +45,7 @@ void * SimpleThread(void * which) {
 
 
 /*** alterered code ***/
-
+//which is an integer pointer to where each thread number is stored
 void * SimpleThread(void * which) {
 	int num, val;
 	int thread_num = *(int *) which;
