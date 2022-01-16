@@ -1,5 +1,7 @@
-class Board {
-	public static void main(String[] args) {
-		return;
+public class Board {
+	Spot[][] square;
+	
+	public Board(){
+		this.cleanBoard();
 	}
 }
