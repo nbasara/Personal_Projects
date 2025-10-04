@@ -1,0 +1,49 @@
+[
+  {
+    "key": "alt+k",
+    "command": "workbench.action.showNextWindowTab"
+  },
+  {
+    "key": "alt+j",
+    "command": "workbench.action.showPreviousWindowTab"
+  },
+  {
+    "key": "backspace k",
+    "command": "editor.action.accessibilityHelpConfigureKeybindings",
+    "when": "accessibilityHelpIsShown && accessibleViewHasUnassignedKeybindings"
+  },
+  {
+    "key": "alt+k",
+    "command": "-editor.action.accessibilityHelpConfigureKeybindings",
+    "when": "accessibilityHelpIsShown && accessibleViewHasUnassignedKeybindings"
+  },
+  {
+    "command": "workbench.action.toggleSidebarVisibility",
+    "key": "cmd+e"
+  },
+  {
+    "command": "workbench.files.action.focusFilesExplorer",
+    "key": "cmd+e",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "n",
+    "command": "explorer.newFile",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "command": "renameFile",
+    "key": "r",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "key": "shift+n",
+    "command": "explorer.newFolder",
+    "when": "explorerViewletFocus"
+  },
+  {
+    "command": "deleteFile",
+    "key": "d",
+    "when": "filesExplorerFocus && !inputFocus"
+  }
+]
